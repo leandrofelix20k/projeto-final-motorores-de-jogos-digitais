@@ -12,16 +12,22 @@ public class MovimentacaoPersonagem : MonoBehaviour
     public float raioEsfera = 0.4f;
     public LayerMask chaoMask;
 
+    public Transform cameraTransform; // Referência à transformação da câmera
+
     public bool isGrounded;
 
     Vector3 velocidadeQueda;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
-        player = GetComponent< CharacterController>();
+        player = GetComponent<CharacterController>();
+        // Se cameraTransform não for atribuído no Inspector, pega a câmera principal
+        if (cameraTransform == null)
+        {
+            cameraTransform = Camera.main.transform;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, raioEsfera, chaoMask);
@@ -32,19 +38,21 @@ public class MovimentacaoPersonagem : MonoBehaviour
         }
 
         float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
+        float z = Input.GetAxis("Vertical"); // Use "z" em vez de "y" (eixo Z = frente/trás)
 
-        Vector3 move = (transform.right * x + transform.forward * y).normalized;
+        // **Movimento baseado na rotação da câmera**:
+        Vector3 move = cameraTransform.right * x + cameraTransform.forward * z;
+        move.y = 0; // Remove inclinação vertical (para evitar subir/descer ao olhar para cima/baixo)
+        move = move.normalized;
 
         player.Move(move * velocidade * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && isGrounded) {
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
             velocidadeQueda.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
         }
 
         velocidadeQueda.y += gravidade * Time.deltaTime;
-
         player.Move(velocidadeQueda * Time.deltaTime);
     }
-
 }
