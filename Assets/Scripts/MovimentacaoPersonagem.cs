@@ -26,11 +26,25 @@ public class MovimentacaoPersonagem : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, raioEsfera, chaoMask);
 
+        if (isGrounded && velocidadeQueda.y < 0)
+        {
+            velocidadeQueda.y = -2f;
+        }
+
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * y;
+        Vector3 move = (transform.right * x + transform.forward * y).normalized;
+
         player.Move(move * velocidade * Time.deltaTime);
+
+        if (Input.GetButtonDown("Jump") && isGrounded) {
+            velocidadeQueda.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
+        }
+
+        velocidadeQueda.y += gravidade * Time.deltaTime;
+
+        player.Move(velocidadeQueda * Time.deltaTime);
     }
 
 }
