@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class MovimentacaoPersonagem : MonoBehaviour
 {
-    public CharacterController player;
+    public CharacterController controle;
     public float velocidade = 6f;
     public float alturaPulo = 3f;
     public float gravidade = -20f;
@@ -11,16 +11,22 @@ public class MovimentacaoPersonagem : MonoBehaviour
     public Transform groundCheck;
     public float raioEsfera = 0.4f;
     public LayerMask chaoMask;
+    public bool estaNoChao;
+
+    Vector3 velocidadeCai;
 
     public Transform cameraTransform; // Referência à transformação da câmera
-
-    public bool isGrounded;
-
-    Vector3 velocidadeQueda;
+    public bool estaAbaixado;
+    public bool levantarBloqueado;
+    public float alturaLevantado, alturaAbaixado, posicaoCameraEmPe, posicaoCameraAbaixado;
+    RaycastHit hit;
 
     void Start()
     {
-        player = GetComponent<CharacterController>();
+        controle = GetComponent<CharacterController>();
+        estaAbaixado = false;
+        cameraTransform = Camera.main.transform;
+
         // Se cameraTransform não for atribuído no Inspector, pega a câmera principal
         if (cameraTransform == null)
         {
@@ -30,11 +36,11 @@ public class MovimentacaoPersonagem : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, raioEsfera, chaoMask);
+        estaNoChao = Physics.CheckSphere(groundCheck.position, raioEsfera, chaoMask);
 
-        if (isGrounded && velocidadeQueda.y < 0)
+        if (estaNoChao && velocidadeCai.y < 0)
         {
-            velocidadeQueda.y = -2f;
+            velocidadeCai.y = -2f;
         }
 
         float x = Input.GetAxis("Horizontal");
@@ -45,14 +51,40 @@ public class MovimentacaoPersonagem : MonoBehaviour
         move.y = 0; // Remove inclinação vertical (para evitar subir/descer ao olhar para cima/baixo)
         move = move.normalized;
 
-        player.Move(move * velocidade * Time.deltaTime);
+        controle.Move(move * velocidade * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && estaNoChao)
         {
-            velocidadeQueda.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
+            velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
         }
 
-        velocidadeQueda.y += gravidade * Time.deltaTime;
-        player.Move(velocidadeQueda * Time.deltaTime);
+        velocidadeCai.y += gravidade * Time.deltaTime;
+        controle.Move(velocidadeCai * Time.deltaTime);
+
+        if(Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            Abaixar();
+        }
+    }
+
+    void Abaixar()
+    {
+        estaAbaixado = !estaAbaixado;
+        if (estaAbaixado)
+        {
+            controle.height = alturaAbaixado;
+            cameraTransform.localPosition = new Vector3(0, posicaoCameraAbaixado, 0);
+        }
+        else
+        {
+            controle.height = alturaLevantado;
+            cameraTransform.localPosition = new Vector3(0, posicaoCameraEmPe, 0);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(groundCheck.position, raioEsfera);
     }
 }
