@@ -3,7 +3,7 @@ using UnityEngine;
 public class MovimentoCabeca : MonoBehaviour
 {
     private float tempo = 0.0f;
-    public float velocidade = 0.04f;
+    public float velocidade = 0.1f;
     public float forca = 0.1f;
     public float pontoOrigem = 0.0f;
 
@@ -11,10 +11,16 @@ public class MovimentoCabeca : MonoBehaviour
     float horizontal;
     float vertical;
     Vector3 salvaPosicao;
+
+    AudioSource audioSource;
+    public AudioClip[] audioClip;
+    public int indexPassos;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
+        indexPassos = 0;
     }
 
     // Update is called once per frame
@@ -55,5 +61,21 @@ public class MovimentoCabeca : MonoBehaviour
         }
 
         transform.localPosition = salvaPosicao;
+
+        SomPassos();
+    }
+
+    void SomPassos()
+    {
+        if (cortaOnda <= -0.95f && !audioSource.isPlaying)
+        {
+            audioSource.clip = audioClip[indexPassos];
+            audioSource.Play();
+            indexPassos++;
+            if(indexPassos >= 4)
+            {
+                indexPassos = 0;
+            }
+        }
     }
 }
