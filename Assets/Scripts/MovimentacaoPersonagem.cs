@@ -61,6 +61,11 @@ public class MovimentacaoPersonagem : MonoBehaviour
         velocidadeCai.y += gravidade * Time.deltaTime;
         controle.Move(velocidadeCai * Time.deltaTime);
 
+        if(estaAbaixado)
+        {
+            checarBloqueioAbaixado();
+        }
+
         if(Input.GetKeyDown(KeyCode.LeftControl))
         {
             Abaixar();
@@ -69,6 +74,11 @@ public class MovimentacaoPersonagem : MonoBehaviour
 
     void Abaixar()
     {
+        if(levantarBloqueado || estaNoChao == false)
+        {
+            return ;
+        }
+
         estaAbaixado = !estaAbaixado;
         if (estaAbaixado)
         {
@@ -79,6 +89,20 @@ public class MovimentacaoPersonagem : MonoBehaviour
         {
             controle.height = alturaLevantado;
             cameraTransform.localPosition = new Vector3(0, posicaoCameraEmPe, 0);
+        }
+    }
+
+    void checarBloqueioAbaixado()
+    {
+        Debug.DrawRay(cameraTransform.position, Vector3.up * 1.1f, Color.red);
+
+        if (Physics.Raycast(cameraTransform.position, Vector3.up, out hit, 1.1f))
+        {
+            levantarBloqueado = true;
+        } 
+        else
+        {
+            levantarBloqueado = false;
         }
     }
 
