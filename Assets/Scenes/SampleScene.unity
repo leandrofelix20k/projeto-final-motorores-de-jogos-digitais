@@ -352,7 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fdd7b9bd3dfb864bbcdd04a2168f184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidade: 0.1
+  velocidade: 0.05
   forca: 0.1
   pontoOrigem: 0
   audioClip:

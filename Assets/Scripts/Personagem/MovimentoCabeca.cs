@@ -3,7 +3,7 @@ using UnityEngine;
 public class MovimentoCabeca : MonoBehaviour
 {
     private float tempo = 0.0f;
-    public float velocidade = 0.1f;
+    public float velocidade = 0.05f;
     public float forca = 0.1f;
     public float pontoOrigem = 0.0f;
 
