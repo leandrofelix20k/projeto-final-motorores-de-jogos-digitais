@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BASA
 {
@@ -7,6 +8,7 @@ namespace BASA
         public float distanciaAlvo;
         public GameObject obejArrasta, objPega;
         RaycastHit hit;
+        public Text textButton, textInfo;
 
         void Update()
         {
@@ -21,16 +23,24 @@ namespace BASA
 
                     if (hit.transform.gameObject.tag == "objArrasta")
                     {
-                         obejArrasta = hit.transform.gameObject;
+                        obejArrasta = hit.transform.gameObject;
+                        objPega = null;
+                        textButton.text = "[E]";
+                        textInfo.text = "Agarra/Solta";
                     }
 
                     if (hit.transform.gameObject.tag == "objPega")
                     {
                         objPega = hit.transform.gameObject;
+                        obejArrasta = null;
+                        textButton.text = "[E]";
+                        textInfo.text = "Pegar";
                     }
                 }
                 else
                 {
+                    textButton.text = "";
+                    textInfo.text = "";
                     obejArrasta = null;
                     objPega = null;
                 }
