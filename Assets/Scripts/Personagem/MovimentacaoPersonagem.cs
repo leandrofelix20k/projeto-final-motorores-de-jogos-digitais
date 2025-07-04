@@ -5,6 +5,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
 {
     public CharacterController controle;
     public float velocidade = 6f;
+    public float velocidadeAbaixado = 3f; // Nova variável para velocidade agachado
     public float alturaPulo = 3f;
     public float gravidade = -20f;
 
@@ -15,19 +16,23 @@ public class MovimentacaoPersonagem : MonoBehaviour
 
     Vector3 velocidadeCai;
 
-    public Transform cameraTransform; // Referência à transformação da câmera
+    public Transform cameraTransform;
     public bool estaAbaixado;
     public bool levantarBloqueado;
     public float alturaLevantado, alturaAbaixado, posicaoCameraEmPe, posicaoCameraAbaixado;
     RaycastHit hit;
+
+    private float velocidadeNormal;
+    private MovimentoCabeca movimentoCabeca;
 
     void Start()
     {
         controle = GetComponent<CharacterController>();
         estaAbaixado = false;
         cameraTransform = Camera.main.transform;
+        velocidadeNormal = velocidade;
+        movimentoCabeca = GetComponentInChildren<MovimentoCabeca>();
 
-        // Se cameraTransform não for atribuído no Inspector, pega a câmera principal
         if (cameraTransform == null)
         {
             cameraTransform = Camera.main.transform;
@@ -44,29 +49,32 @@ public class MovimentacaoPersonagem : MonoBehaviour
         }
 
         float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical"); // Use "z" em vez de "y" (eixo Z = frente/trás)
+        float z = Input.GetAxis("Vertical");
 
-        // **Movimento baseado na rotação da câmera**:
         Vector3 move = cameraTransform.right * x + cameraTransform.forward * z;
-        move.y = 0; // Remove inclinação vertical (para evitar subir/descer ao olhar para cima/baixo)
+        move.y = 0;
         move = move.normalized;
 
-        controle.Move(move * velocidade * Time.deltaTime);
+        // Aplica velocidade reduzida se estiver agachado
+        float velocidadeAtual = estaAbaixado ? velocidadeAbaixado : velocidadeNormal;
+        controle.Move(move * velocidadeAtual * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && estaNoChao)
         {
             velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
+            if (movimentoCabeca != null)
+                movimentoCabeca.PararPassos();
         }
 
         velocidadeCai.y += gravidade * Time.deltaTime;
         controle.Move(velocidadeCai * Time.deltaTime);
 
-        if(estaAbaixado)
+        if (estaAbaixado)
         {
             checarBloqueioAbaixado();
         }
 
-        if(Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             Abaixar();
         }
@@ -74,21 +82,26 @@ public class MovimentacaoPersonagem : MonoBehaviour
 
     void Abaixar()
     {
-        if(levantarBloqueado || estaNoChao == false)
+        if (levantarBloqueado || !estaNoChao)
         {
-            return ;
+            return;
         }
 
         estaAbaixado = !estaAbaixado;
+
         if (estaAbaixado)
         {
             controle.height = alturaAbaixado;
             cameraTransform.localPosition = new Vector3(0, posicaoCameraAbaixado, 0);
+            if (movimentoCabeca != null)
+                movimentoCabeca.ReduzirOscilacao(0.5f);
         }
         else
         {
             controle.height = alturaLevantado;
             cameraTransform.localPosition = new Vector3(0, posicaoCameraEmPe, 0);
+            if (movimentoCabeca != null)
+                movimentoCabeca.RestaurarOscilacao();
         }
     }
 
@@ -99,7 +112,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
         if (Physics.Raycast(cameraTransform.position, Vector3.up, out hit, 1.1f))
         {
             levantarBloqueado = true;
-        } 
+        }
         else
         {
             levantarBloqueado = false;

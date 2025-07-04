@@ -16,16 +16,31 @@ public class MovimentoCabeca : MonoBehaviour
     public AudioClip[] audioClip;
     public int indexPassos;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float forcaNormal;
+    private float velocidadeNormal;
+    private bool pulando = false;
+    private MovimentacaoPersonagem movPersonagem;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
         indexPassos = 0;
+        forcaNormal = forca;
+        velocidadeNormal = velocidade;
+        movPersonagem = GetComponentInParent<MovimentacaoPersonagem>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (pulando)
+        {
+            if (movPersonagem != null && movPersonagem.estaNoChao)
+            {
+                pulando = false;
+            }
+            return;
+        }
+
         cortaOnda = 0.0f;
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
@@ -47,7 +62,7 @@ public class MovimentoCabeca : MonoBehaviour
             }
         }
 
-        if(cortaOnda != 0)
+        if (cortaOnda != 0)
         {
             float mudaMovimentacao = cortaOnda * forca;
             float eixosTotais = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
@@ -67,15 +82,31 @@ public class MovimentoCabeca : MonoBehaviour
 
     void SomPassos()
     {
+        if (pulando) return;
+
         if (cortaOnda <= -0.95f && !audioSource.isPlaying)
         {
             audioSource.clip = audioClip[indexPassos];
             audioSource.Play();
-            indexPassos++;
-            if(indexPassos >= 4)
-            {
-                indexPassos = 0;
-            }
+            indexPassos = (indexPassos + 1) % audioClip.Length;
         }
+    }
+
+    public void PararPassos()
+    {
+        pulando = true;
+        audioSource.Stop();
+    }
+
+    public void ReduzirOscilacao(float fatorReducao)
+    {
+        forca = forcaNormal * fatorReducao;
+        velocidade = velocidadeNormal * fatorReducao;
+    }
+
+    public void RestaurarOscilacao()
+    {
+        forca = forcaNormal;
+        velocidade = velocidadeNormal;
     }
 }
