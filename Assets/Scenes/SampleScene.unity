@@ -333,7 +333,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: f4a1284f2d77ca441b59035af503f285, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1259170358}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f4a1284f2d77ca441b59035af503f285, type: 3}
       insertIndex: -1
@@ -1205,6 +1208,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1259170357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1259170358}
+  m_Layer: 0
+  m_Name: EfeitotiroPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1259170358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259170357}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.073, z: 0.147}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1603544571}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1583795786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1367,6 +1401,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc2fef4723e1de4889f1b3a78b0e4de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  faisca: {fileID: 7423203385707777643, guid: 782ca934e5a0f404093cd002c97daa2b, type: 3}
+  buraco: {fileID: 795939106184328839, guid: 052aaabf5767f2d4abe32eaf28f1e7f3, type: 3}
+  fumaca: {fileID: 3126457868495115394, guid: 5bc8ba72d4bd799489b2f6190634937c, type: 3}
+  efeitoTiro: {fileID: 3126457868495115394, guid: 886586e5c00f99e44b327e5886a5986d, type: 3}
+  posEfeitoTiro: {fileID: 1259170357}
 --- !u!1 &1637645720
 GameObject:
   m_ObjectHideFlags: 0

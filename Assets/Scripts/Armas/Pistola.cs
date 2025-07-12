@@ -7,6 +7,12 @@ public class Pistola : MonoBehaviour
     bool estaAtirando;
     RaycastHit hit;
 
+    public GameObject faisca;
+    public GameObject buraco;
+    public GameObject fumaca;
+    public GameObject efeitoTiro;
+    public GameObject posEfeitoTiro;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,9 +41,13 @@ public class Pistola : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(screenX, screenY));
         animator.Play("Atira");
 
+        GameObject efeitoTiroObj = Instantiate(efeitoTiro, posEfeitoTiro.transform.position, posEfeitoTiro.transform.rotation);
+        efeitoTiroObj.transform.parent = posEfeitoTiro.transform;
+
         if (Physics.SphereCast(ray, 0.1f, out hit))
         {
-            if(hit.transform.tag == "objArrasta")
+            InstanciaEfeitos();
+            if (hit.transform.tag == "objArrasta")
             {
                 Vector3 direcaoBala = ray.direction;
 
@@ -50,5 +60,14 @@ public class Pistola : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f); 
         estaAtirando = false;
+    }
+
+    void InstanciaEfeitos()
+    {
+        Instantiate(faisca, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+        Instantiate(fumaca, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+
+        GameObject buracoObj = Instantiate(buraco, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+        buracoObj.transform.parent = hit.transform;
     }
 }
