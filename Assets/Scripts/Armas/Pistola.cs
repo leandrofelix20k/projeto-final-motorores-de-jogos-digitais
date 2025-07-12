@@ -1,53 +1,54 @@
+using System.Collections;
 using UnityEngine;
 
 public class Pistola : MonoBehaviour
 {
-    [Header("Referências")]
-    public Animator animacao;
+    Animator animator;
+    bool estaAtirando;
+    RaycastHit hit;
 
-    [Header("Configurações")]
-    public float cooldownTiro = 0.3f;
-
-    private bool podeAtirar = true;
-    private RaycastHit hitInfo;
-
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (animacao == null)
-            animacao = GetComponent<Animator>();
+        estaAtirando = false;
+        animator = GetComponent<Animator>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && podeAtirar)
+        if (Input.GetButtonDown("Fire1"))
         {
-            Atirar();
+            if (!estaAtirando)
+            {
+                estaAtirando = true;
+                StartCoroutine(Atirando());
+            }
         }
     }
 
-    void Atirar()
+    IEnumerator Atirando()
     {
-        podeAtirar = false;
+        float screenX = Screen.width / 2;
+        float screenY = Screen.height / 2;
 
-        // Dispara animação
-        animacao.SetTrigger("Atirar");
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(screenX, screenY));
+        animator.Play("Atira");
 
-        // Lógica do tiro
-        Vector3 centroTela = new Vector3(Screen.width / 2, Screen.height / 2, 0);
-        Ray raio = Camera.main.ScreenPointToRay(centroTela);
-
-        if (Physics.SphereCast(raio, 0.1f, out hitInfo))
+        if (Physics.SphereCast(ray, 0.1f, out hit))
         {
-            Debug.Log("Acertou: " + hitInfo.transform.name);
+            if(hit.transform.tag == "objArrasta")
+            {
+                Vector3 direcaoBala = ray.direction;
+
+                if (hit.rigidbody != null)
+                {
+                    hit.rigidbody.AddForceAtPosition(direcaoBala * 500, hit.point);
+                }
+            }
         }
 
-        // Reset após cooldown
-        Invoke("ResetarTiro", cooldownTiro);
-    }
-
-    void ResetarTiro()
-    {
-        podeAtirar = true;
-        animacao.ResetTrigger("Atirar");
+        yield return new WaitForSeconds(0.3f); 
+        estaAtirando = false;
     }
 }

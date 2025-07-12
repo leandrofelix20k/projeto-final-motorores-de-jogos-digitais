@@ -1367,8 +1367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc2fef4723e1de4889f1b3a78b0e4de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animacao: {fileID: 0}
-  cooldownTiro: 0.3
 --- !u!1 &1637645720
 GameObject:
   m_ObjectHideFlags: 0
