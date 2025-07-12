@@ -1,4 +1,5 @@
 using UnityEngine;
+using BASA;
 
 public class MovimentoCabeca : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class MovimentoCabeca : MonoBehaviour
     public AudioClip[] audioClip;
     public int indexPassos;
 
+    MovimentacaoPersonagem scriptMovimenta;
+
     private float forcaNormal;
     private float velocidadeNormal;
     private bool pulando = false;
@@ -23,6 +26,7 @@ public class MovimentoCabeca : MonoBehaviour
 
     void Start()
     {
+        scriptMovimenta = GetComponentInParent<MovimentacaoPersonagem>();
         audioSource = GetComponent<AudioSource>();
         indexPassos = 0;
         forcaNormal = forca;
@@ -78,17 +82,37 @@ public class MovimentoCabeca : MonoBehaviour
         transform.localPosition = salvaPosicao;
 
         SomPassos();
+        AtualizaCabeca();
     }
 
     void SomPassos()
     {
         if (pulando) return;
 
-        if (cortaOnda <= -0.95f && !audioSource.isPlaying)
+        if (cortaOnda <= -0.95f && !audioSource.isPlaying && scriptMovimenta.estaNoChao)
         {
             audioSource.clip = audioClip[indexPassos];
             audioSource.Play();
             indexPassos = (indexPassos + 1) % audioClip.Length;
+        }
+    }
+
+    void AtualizaCabeca()
+    {
+        if (scriptMovimenta.estaCorrendo)
+        {
+            velocidade = 0.25f;
+            forca = 0.25f;
+        } 
+        else if(scriptMovimenta.estaAbaixado)
+        {
+            velocidade = 0.15f;
+            forca = 0.11f;
+        }
+        else
+        {
+            velocidade = 0.18f;
+            forca = 0.15f;
         }
     }
 
