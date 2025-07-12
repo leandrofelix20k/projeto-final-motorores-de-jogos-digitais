@@ -44,7 +44,7 @@ public class Pistola : MonoBehaviour
         GameObject efeitoTiroObj = Instantiate(efeitoTiro, posEfeitoTiro.transform.position, posEfeitoTiro.transform.rotation);
         efeitoTiroObj.transform.parent = posEfeitoTiro.transform;
 
-        if (Physics.SphereCast(ray, 0.1f, out hit))
+        if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-0.05f, 0.05f), ray.origin.y + Random.Range(-0.05f, 0.05f), ray.origin.z), Camera.main.transform.forward, out hit))
         {
             InstanciaEfeitos();
             if (hit.transform.tag == "objArrasta")
