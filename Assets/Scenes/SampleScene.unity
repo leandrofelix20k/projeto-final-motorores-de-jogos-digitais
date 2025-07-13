@@ -7139,7 +7139,14 @@ MonoBehaviour:
   efeitoTiro: {fileID: 3126457868495115394, guid: 886586e5c00f99e44b327e5886a5986d, type: 3}
   posEfeitoTiro: {fileID: 1259170357}
   rastroBala: {fileID: 451156006}
-  audioArma: {fileID: 0}
+  audioArma: {fileID: 1603544575}
+  sonsArma:
+  - {fileID: 8300000, guid: 78d626a1d9c542f4db8e405ce449a961, type: 3}
+  - {fileID: 8300000, guid: 0c0e84f90c2e3d4439382af98367bf52, type: 3}
+  - {fileID: 8300000, guid: 050dc5ceb6914214290bd08672a38715, type: 3}
+  - {fileID: 8300000, guid: 73bec9fdb5bd19749a635a221bd0c242, type: 3}
+  carregador: 3
+  municao: 12
 --- !u!82 &1603544575
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7150,8 +7157,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f57018bd3db607e45a93296e7ab5b4b0, type: 3}
-  m_Resource: {fileID: 8300000, guid: f57018bd3db607e45a93296e7ab5b4b0, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
