@@ -4,32 +4,41 @@ using UnityEngine.InputSystem;
 
 public class MovimentacaoPersonagem : MonoBehaviour
 {
+    [Header("Configuracao Personagem")]
     public CharacterController controle;
     public float velocidade = 6f;
     public float velocidadeAbaixado = 3f; // Nova variável para velocidade agachado
     public float alturaPulo = 3f;
     public float gravidade = -20f;
+    public bool estaCorrendo;
 
+    [Header("Verifica Chao")]
     public Transform groundCheck;
     public float raioEsfera = 0.4f;
     public LayerMask chaoMask;
     public bool estaNoChao;
-
     Vector3 velocidadeCai;
 
+    [Header("Verifica Abaixado")]
     public Transform cameraTransform;
     public bool estaAbaixado;
     public bool levantarBloqueado;
     public float alturaLevantado, alturaAbaixado, posicaoCameraEmPe, posicaoCameraAbaixado;
     float velocidadeCorrente = 1f;
     RaycastHit hit;
-    public bool estaCorrendo;
 
     private float velocidadeNormal;
     private MovimentoCabeca movimentoCabeca;
 
+    [Header("Status Personagem")]
+    public float hp = 100f;
+    public float stamina = 100f;
+    public bool cansado;
+    public Respiracao scriptRespiracao;
+
     void Start()
     {
+        cansado = false;
         estaCorrendo = false;
         controle = GetComponent<CharacterController>();
         estaAbaixado = false;
@@ -48,6 +57,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
         Verificacoes();
         MovimentoAbaixa();
         Inputs();
+        CondicaoPlayer();
     }
 
     void Verificacoes()
@@ -98,14 +108,18 @@ public class MovimentacaoPersonagem : MonoBehaviour
 
     void Inputs()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && estaNoChao && !estaAbaixado)
+        if (Input.GetKey(KeyCode.LeftShift) && estaNoChao && !estaAbaixado && !cansado)
         {
             estaCorrendo = true;
             velocidade = 9;
+            stamina -= 0.3f;
+            stamina = Mathf.Clamp(stamina, 0, 100);
         }
         else
         {
             estaCorrendo = false;
+            stamina += 0.1f;
+            stamina = Mathf.Clamp(stamina, 0, 100);
         }
 
         if (Input.GetButtonDown("Jump") && estaNoChao)
@@ -150,5 +164,19 @@ public class MovimentacaoPersonagem : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(groundCheck.position, raioEsfera);
+    }
+
+    void CondicaoPlayer()
+    {
+        if(stamina == 0)
+        {
+            cansado = true;
+            scriptRespiracao.forcaResp = 5;
+        }
+
+        if(stamina > 20)
+        {
+            cansado = false;
+        }
     }
 }
