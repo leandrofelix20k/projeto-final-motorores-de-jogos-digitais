@@ -1,4 +1,5 @@
 using System.Collections;
+using BASA;
 using UnityEngine;
 
 public class Pistola : MonoBehaviour
@@ -21,17 +22,26 @@ public class Pistola : MonoBehaviour
 
     public int carregador = 3;
     public int municao = 12;
+
+    UiManager uiScript;
+    public GameObject posUI;
+
+    public bool automatico;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        automatico = false;
         estaAtirando = false;
         animator = GetComponent<Animator>();
         audioArma = GetComponent<AudioSource>();
+        uiScript = GameObject.FindWithTag("uiManager").GetComponent<UiManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        uiScript.municao.text = municao.ToString() + "/" + carregador.ToString();
+
         if (animator.GetBool("ocorreAcao"))
         {
             return;
