@@ -11,6 +11,9 @@ public class MovimentacaoPersonagem : MonoBehaviour
     public float alturaPulo = 3f;
     public float gravidade = -20f;
     public bool estaCorrendo;
+    public AudioClip[] audiosPulo;
+    AudioSource audioPulo;
+    bool noAr;
 
     [Header("Verifica Chao")]
     public Transform groundCheck;
@@ -45,6 +48,8 @@ public class MovimentacaoPersonagem : MonoBehaviour
         cameraTransform = Camera.main.transform;
         velocidadeNormal = velocidade;
         movimentoCabeca = GetComponentInChildren<MovimentoCabeca>();
+        audioPulo = GetComponent<AudioSource>();
+        noAr = false;
 
         if (cameraTransform == null)
         {
@@ -58,6 +63,22 @@ public class MovimentacaoPersonagem : MonoBehaviour
         MovimentoAbaixa();
         Inputs();
         CondicaoPlayer();
+        somPulo();
+    }
+
+    void somPulo()
+    {
+        if (!estaNoChao)
+        {
+            noAr = true;
+        }
+
+        if(estaNoChao && noAr)
+        {
+            noAr = false;
+            audioPulo.clip = audiosPulo[0];
+            audioPulo.Play();
+        }
     }
 
     void Verificacoes()
@@ -125,6 +146,8 @@ public class MovimentacaoPersonagem : MonoBehaviour
         if (Input.GetButtonDown("Jump") && estaNoChao)
         {
             velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
+            audioPulo.clip = audiosPulo[0];
+            audioPulo.Play();
             if (movimentoCabeca != null)
                 movimentoCabeca.PararPassos();
         }

@@ -7,9 +7,14 @@ namespace BASA
     {
         public Slider sliderHP, sliderStamina;
         public MovimentacaoPersonagem scriptMovimenta;
+        public Text municao;
+        public Image imagemModotiro;
+        public Sprite[] spriteModoTiro;
         void Start()
         {
             scriptMovimenta = GameObject.FindWithTag("Player").GetComponent<MovimentacaoPersonagem>();
+            municao.enabled = true;
+            imagemModotiro.enabled = true;
         }
 
         void Update()
