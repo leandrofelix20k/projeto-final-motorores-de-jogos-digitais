@@ -15,24 +15,38 @@ public class Pistola : MonoBehaviour
 
     public ParticleSystem rastroBala;
 
+    public AudioSource audioArma;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         estaAtirando = false;
         animator = GetComponent<Animator>();
+        audioArma = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (animator.GetBool("ocorreAcao"))
+        {
+            return;
+        }
+
         if (Input.GetButtonDown("Fire1"))
         {
             if (!estaAtirando)
             {
+                audioArma.Play();
                 rastroBala.Play();
                 estaAtirando = true;
                 StartCoroutine(Atirando());
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            animator.Play("Recarrega");
         }
     }
 
