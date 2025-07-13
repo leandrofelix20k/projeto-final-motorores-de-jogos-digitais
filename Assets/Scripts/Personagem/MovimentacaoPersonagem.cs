@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,13 +21,16 @@ public class MovimentacaoPersonagem : MonoBehaviour
     public bool estaAbaixado;
     public bool levantarBloqueado;
     public float alturaLevantado, alturaAbaixado, posicaoCameraEmPe, posicaoCameraAbaixado;
+    float velocidadeCorrente = 1f;
     RaycastHit hit;
+    public bool estaCorrendo;
 
     private float velocidadeNormal;
     private MovimentoCabeca movimentoCabeca;
 
     void Start()
     {
+        estaCorrendo = false;
         controle = GetComponent<CharacterController>();
         estaAbaixado = false;
         cameraTransform = Camera.main.transform;
@@ -40,6 +44,13 @@ public class MovimentacaoPersonagem : MonoBehaviour
     }
 
     void Update()
+    {
+        Verificacoes();
+        MovimentoAbaixa();
+        Inputs();
+    }
+
+    void Verificacoes()
     {
         estaNoChao = Physics.CheckSphere(groundCheck.position, raioEsfera, chaoMask);
 
@@ -59,19 +70,49 @@ public class MovimentacaoPersonagem : MonoBehaviour
         float velocidadeAtual = estaAbaixado ? velocidadeAbaixado : velocidadeNormal;
         controle.Move(move * velocidadeAtual * Time.deltaTime);
 
+
+        velocidadeCai.y += gravidade * Time.deltaTime;
+        controle.Move(velocidadeCai * Time.deltaTime);
+    }
+
+    void MovimentoAbaixa()
+    {
+        controle.center = Vector3.down * (alturaLevantado - controle.height) / 2f;
+
+        if(estaAbaixado)
+        {
+            controle.height = Mathf.Lerp(controle.height, alturaAbaixado, Time.deltaTime * 3);
+            float novoY = Mathf.SmoothDamp(cameraTransform.localPosition.y, posicaoCameraAbaixado, ref velocidadeCorrente, Time.deltaTime * 3);
+            cameraTransform.localPosition = new Vector3(0, novoY, 0);
+            velocidade = 3f;
+            checarBloqueioAbaixado();
+        }
+        else
+        {
+            controle.height = Mathf.Lerp(controle.height, alturaLevantado, Time.deltaTime * 3);
+            float novoY = Mathf.SmoothDamp(cameraTransform.localPosition.y, posicaoCameraEmPe, ref velocidadeCorrente, Time.deltaTime * 3);
+            cameraTransform.localPosition = new Vector3(0, novoY, 0);
+            velocidade = 6f;
+        }
+    }
+
+    void Inputs()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) && estaNoChao && !estaAbaixado)
+        {
+            estaCorrendo = true;
+            velocidade = 9;
+        }
+        else
+        {
+            estaCorrendo = false;
+        }
+
         if (Input.GetButtonDown("Jump") && estaNoChao)
         {
             velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
             if (movimentoCabeca != null)
                 movimentoCabeca.PararPassos();
-        }
-
-        velocidadeCai.y += gravidade * Time.deltaTime;
-        controle.Move(velocidadeCai * Time.deltaTime);
-
-        if (estaAbaixado)
-        {
-            checarBloqueioAbaixado();
         }
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
@@ -88,21 +129,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
         }
 
         estaAbaixado = !estaAbaixado;
-
-        if (estaAbaixado)
-        {
-            controle.height = alturaAbaixado;
-            cameraTransform.localPosition = new Vector3(0, posicaoCameraAbaixado, 0);
-            if (movimentoCabeca != null)
-                movimentoCabeca.ReduzirOscilacao(0.5f);
-        }
-        else
-        {
-            controle.height = alturaLevantado;
-            cameraTransform.localPosition = new Vector3(0, posicaoCameraEmPe, 0);
-            if (movimentoCabeca != null)
-                movimentoCabeca.RestaurarOscilacao();
-        }
+        
     }
 
     void checarBloqueioAbaixado()
