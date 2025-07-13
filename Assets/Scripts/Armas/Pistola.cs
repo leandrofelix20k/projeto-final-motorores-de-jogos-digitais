@@ -25,8 +25,12 @@ public class Pistola : MonoBehaviour
 
     UiManager uiScript;
     public GameObject posUI;
+    MovimentaArma movimentaArmaScript;
 
     public bool automatico;
+    public float numeroAleatorioMira;
+
+    public float valorMira;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,6 +39,8 @@ public class Pistola : MonoBehaviour
         animator = GetComponent<Animator>();
         audioArma = GetComponent<AudioSource>();
         uiScript = GameObject.FindWithTag("uiManager").GetComponent<UiManager>();
+        movimentaArmaScript = GetComponentInParent<MovimentaArma>();
+        valorMira = 280;
     }
 
     // Update is called once per frame
@@ -42,11 +48,34 @@ public class Pistola : MonoBehaviour
     {
         uiScript.municao.text = municao.ToString() + "/" + carregador.ToString();
 
+        ModificaMira();
+
         if (animator.GetBool("ocorreAcao"))
         {
             return;
         }
 
+        Atira();
+        Recarrega();
+        Mira();
+    }
+
+    void ModificaMira()
+    {
+        if (estaAtirando)
+        {
+            valorMira = Mathf.Lerp(valorMira, 420, Time.deltaTime * 20);
+            uiScript.mira.sizeDelta = new Vector2(valorMira, valorMira);
+        }
+        else
+        {
+            valorMira = Mathf.Lerp(valorMira, 280, Time.deltaTime * 20);
+            uiScript.mira.sizeDelta = new Vector2(valorMira, valorMira);
+        }
+    }
+
+    void Atira()
+    {
         if (Input.GetButtonDown("Fire1"))
         {
             if (!estaAtirando && municao > 0)
@@ -57,23 +86,48 @@ public class Pistola : MonoBehaviour
                 rastroBala.Play();
                 estaAtirando = true;
                 StartCoroutine(Atirando());
-            } else if(!estaAtirando && municao == 0 && carregador > 0)
+            }
+            else if (!estaAtirando && municao == 0 && carregador > 0)
             {
                 animator.Play("Recarrega");
                 carregador--;
                 municao = 12;
-            } else if(municao == 0 && carregador == 0)
+            }
+            else if (municao == 0 && carregador == 0)
             {
                 audioArma.clip = sonsArma[3];
                 audioArma.Play();
             }
         }
+    }
 
-        if(Input.GetKeyDown(KeyCode.R) && carregador > 0 && municao < 12)
+    void Recarrega()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && carregador > 0 && municao < 12)
         {
             animator.Play("Recarrega");
             carregador--;
             municao = 12;
+        }
+    }
+
+    void Mira()
+    {
+        if (Input.GetButton("Fire2"))
+        {
+            animator.SetBool("Mira", true);
+            Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 45, Time.deltaTime * 10);
+            uiScript.mira.gameObject.SetActive(false);
+            movimentaArmaScript.valor = 0.01f;
+            numeroAleatorioMira = 0;
+        }
+        else
+        {
+            animator.SetBool("Mira", false);
+            Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, Time.deltaTime * 10);
+            uiScript.mira.gameObject.SetActive(true);
+            movimentaArmaScript.valor = 0.1f;
+            numeroAleatorioMira = 0.05f;
         }
     }
 
@@ -88,7 +142,7 @@ public class Pistola : MonoBehaviour
         GameObject efeitoTiroObj = Instantiate(efeitoTiro, posEfeitoTiro.transform.position, posEfeitoTiro.transform.rotation);
         efeitoTiroObj.transform.parent = posEfeitoTiro.transform;
 
-        if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-0.05f, 0.05f), ray.origin.y + Random.Range(-0.05f, 0.05f), ray.origin.z), Camera.main.transform.forward, out hit))
+        if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.y + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.z), Camera.main.transform.forward, out hit))
         {
             InstanciaEfeitos();
             if (hit.transform.tag == "objArrasta")

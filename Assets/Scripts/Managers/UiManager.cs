@@ -10,6 +10,7 @@ namespace BASA
         public Text municao;
         public Image imagemModotiro;
         public Sprite[] spriteModoTiro;
+        public RectTransform mira;
         void Start()
         {
             scriptMovimenta = GameObject.FindWithTag("Player").GetComponent<MovimentacaoPersonagem>();
