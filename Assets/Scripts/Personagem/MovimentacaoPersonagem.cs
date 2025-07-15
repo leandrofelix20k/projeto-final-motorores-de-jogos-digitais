@@ -133,7 +133,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
         {
             estaCorrendo = true;
             velocidade = 9;
-            stamina -= 0.3f;
+            stamina -= 0.15f;
             stamina = Mathf.Clamp(stamina, 0, 100);
         }
         else
