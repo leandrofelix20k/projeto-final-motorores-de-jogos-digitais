@@ -80,13 +80,13 @@ public class MovimentoCabeca : MonoBehaviour
     {
         if (scriptPersonagem.estaCorrendo)
         {
-            intensidadeAtual = intensidadeCorrendo;    // oscila menos
-            multiplicadorVelocidade = 15f;             // mais rápido
+            intensidadeAtual = intensidadeCorrendo; 
+            multiplicadorVelocidade = 15f;
         }
         else if (scriptPersonagem.estaAbaixado)
         {
-            intensidadeAtual = 0.11f;                  // pequena oscilação
-            multiplicadorVelocidade = 5f;              // mais lento, som espaçado
+            intensidadeAtual = 0.11f;
+            multiplicadorVelocidade = 5f;
         }
         else
         {
