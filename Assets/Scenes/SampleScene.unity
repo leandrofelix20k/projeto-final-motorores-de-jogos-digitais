@@ -8405,7 +8405,7 @@ MonoBehaviour:
   gravidade: -20
   estaCorrendo: 0
   audiosPulo:
-  - {fileID: 8300000, guid: 57945502b2f07434a8b67f876b9ab15b, type: 3}
+  - {fileID: 8300000, guid: f07fdbd8da423d948875dd2282eb349a, type: 3}
   - {fileID: 8300000, guid: d0081a2b4a56a8948a94c46d82475001, type: 3}
   groundCheck: {fileID: 287052059}
   raioEsfera: 0.4
