@@ -146,7 +146,11 @@ public class Pistola : MonoBehaviour
         if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.y + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.z), Camera.main.transform.forward, out hit))
         {
             if(hit.transform.tag == "Inimigo"){
-                hit.transform.GetComponent<InimigoGoianinha>().LevouDano(20);
+                InimigoGoianinha inimigo = hit.transform.GetComponentInParent<InimigoGoianinha>();
+                if (inimigo != null)
+                {
+                    inimigo.LevouDano(20);
+                }
                 GameObject particulaCriada = Instantiate(particulaSangue, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
                 particulaCriada.transform.parent = hit.transform;
             }
