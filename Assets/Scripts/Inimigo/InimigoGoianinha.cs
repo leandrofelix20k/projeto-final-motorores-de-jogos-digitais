@@ -12,9 +12,9 @@ public class InimigoGoianinha : MonoBehaviour
     public int hp = 100;
     Ragdoll ragscript;
 
+    public GameObject objDesliza;
     public bool estaMorto;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         navMesh = GetComponent<NavMeshAgent>();
@@ -26,28 +26,30 @@ public class InimigoGoianinha : MonoBehaviour
         estaMorto = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        distanciaPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-        VaiAtrasJogador();
-        OlhaParaPlayer();
-
-        if(hp <= 0 && estaMorto == false)
+        if(!estaMorto)
         {
-            estaMorto = true;
-            ParaDeAndar();
-            ragscript.AtivaRagdoll();
-            this.enabled = false;
+            if (estaMorto) return;
+
+            distanciaPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+            VaiAtrasJogador();
+            OlhaParaPlayer();
+
+            if (hp <= 0 && !estaMorto)
+            {
+                Morre();
+            }
         }
+       
     }
 
     void VaiAtrasJogador()
     {
         navMesh.speed = velocidade;
 
-        if(distanciaPlayer < distanciaDoAtaque)
+        if (distanciaPlayer < distanciaDoAtaque)
         {
             navMesh.isStopped = true;
             anim.SetTrigger("ataca");
@@ -55,11 +57,13 @@ public class InimigoGoianinha : MonoBehaviour
             anim.SetBool("paraAtaque", false);
             CorrigiRigEntra();
         }
-        if(distanciaPlayer >= 3)
+
+        if (distanciaPlayer >= 3)
         {
             anim.SetBool("paraAtaque", true);
         }
-        if(anim.GetBool("podeAndar"))
+
+        if (anim.GetBool("podeAndar"))
         {
             navMesh.isStopped = false;
             navMesh.SetDestination(player.transform.position);
@@ -75,25 +79,10 @@ public class InimigoGoianinha : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotacao, Time.deltaTime * 300);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            CorrigiRigEntra();
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            CorrigiRigSai();
-        }
-    }
-    
     void CorrigiRigEntra()
     {
         ragscript.rigid.linearVelocity = Vector3.zero;
+        ragscript.rigid.angularVelocity = Vector3.zero;
         ragscript.rigid.isKinematic = true;
     }
 
@@ -104,12 +93,41 @@ public class InimigoGoianinha : MonoBehaviour
 
     public void LevouDano(int dano)
     {
+        if (estaMorto) return;
+
         hp -= dano;
+        if (hp <= 0)
+        {
+            Morre();
+        }
+        else
+        {
+            ParaDeAndar();
+        }
     }
 
     void ParaDeAndar()
     {
         navMesh.isStopped = true;
+        anim.SetTrigger("levouTiro");
         anim.SetBool("podeAndar", false);
+        CorrigiRigEntra();
+    }
+
+    void Morre()
+    {
+        objDesliza.SetActive(false);
+        estaMorto = true;
+
+        navMesh.isStopped = true;
+        anim.enabled = false;
+
+        navMesh.enabled = false;
+        ragscript.AtivaRagdoll();
+    }
+
+    public void DaDano()
+    {
+        player.GetComponent<MovimentacaoPersonagem>().hp -= 10;
     }
 }
