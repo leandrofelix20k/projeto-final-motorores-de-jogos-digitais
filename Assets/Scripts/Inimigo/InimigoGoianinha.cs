@@ -9,6 +9,7 @@ public class InimigoGoianinha : MonoBehaviour
     public float distanciaPlayer;
     public float velocidade = 5;
     Animator anim;
+    public int hp = 100;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -85,5 +86,10 @@ public class InimigoGoianinha : MonoBehaviour
     {
         navMesh.isStopped = false;
         anim.SetBool("podeAndar", true);
+    }
+
+    public void LevouDano(int dano)
+    {
+        hp -= dano;
     }
 }
