@@ -13,6 +13,7 @@ public class Pistola : MonoBehaviour
     public GameObject fumaca;
     public GameObject efeitoTiro;
     public GameObject posEfeitoTiro;
+    public GameObject particulaSangue;
 
     public ParticleSystem rastroBala;
 
@@ -144,14 +145,21 @@ public class Pistola : MonoBehaviour
 
         if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.y + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.z), Camera.main.transform.forward, out hit))
         {
-            InstanciaEfeitos();
-            if (hit.transform.tag == "objArrasta")
+            if(hit.transform.tag == "Inimigo"){
+                InimigoGoianinha inimigo = hit.transform.GetComponentInParent<InimigoGoianinha>();
+                if (inimigo != null)
+                {
+                    inimigo.LevouDano(20);
+                }
+                GameObject particulaCriada = Instantiate(particulaSangue, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                particulaCriada.transform.parent = hit.transform;
+            }
+            else
             {
-                Vector3 direcaoBala = ray.direction;
-
+                InstanciaEfeitos();
                 if (hit.rigidbody != null)
                 {
-                    hit.rigidbody.AddForceAtPosition(direcaoBala * 500, hit.point);
+                    AdicionaForca(ray, 400);
                 }
             }
         }
@@ -179,5 +187,12 @@ public class Pistola : MonoBehaviour
     {
         audioArma.clip = sonsArma[2];
         audioArma.Play();
+    }
+
+    void AdicionaForca(Ray ray, float forca)
+    {
+        Vector3 direcaoBala = ray.direction;
+
+        hit.rigidbody.AddForceAtPosition(direcaoBala * forca, hit.point);
     }
 }

@@ -9,6 +9,10 @@ public class InimigoGoianinha : MonoBehaviour
     public float distanciaPlayer;
     public float velocidade = 5;
     Animator anim;
+    public int hp = 100;
+    Ragdoll ragscript;
+
+    public bool estaMorto;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,6 +20,10 @@ public class InimigoGoianinha : MonoBehaviour
         navMesh = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
+        ragscript = GetComponent<Ragdoll>();
+
+        ragscript.DesativaRagdoll();
+        estaMorto = false;
     }
 
     // Update is called once per frame
@@ -25,6 +33,14 @@ public class InimigoGoianinha : MonoBehaviour
 
         VaiAtrasJogador();
         OlhaParaPlayer();
+
+        if(hp <= 0 && estaMorto == false)
+        {
+            estaMorto = true;
+            ParaDeAndar();
+            ragscript.AtivaRagdoll();
+            this.enabled = false;
+        }
     }
 
     void VaiAtrasJogador()
@@ -77,13 +93,23 @@ public class InimigoGoianinha : MonoBehaviour
     
     void CorrigiRigEntra()
     {
-        navMesh.isStopped = true;
-        anim.SetBool("podeAndar", false);
+        ragscript.rigid.linearVelocity = Vector3.zero;
+        ragscript.rigid.isKinematic = true;
     }
 
     void CorrigiRigSai()
     {
-        navMesh.isStopped = false;
-        anim.SetBool("podeAndar", true);
+        ragscript.rigid.isKinematic = false;
+    }
+
+    public void LevouDano(int dano)
+    {
+        hp -= dano;
+    }
+
+    void ParaDeAndar()
+    {
+        navMesh.isStopped = true;
+        anim.SetBool("podeAndar", false);
     }
 }
