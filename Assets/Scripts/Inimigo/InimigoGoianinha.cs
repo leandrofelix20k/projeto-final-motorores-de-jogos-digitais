@@ -24,6 +24,7 @@ public class InimigoGoianinha : MonoBehaviour
         distanciaPlayer = Vector3.Distance(transform.position, player.transform.position);
 
         VaiAtrasJogador();
+        OlhaParaPlayer();
     }
 
     void VaiAtrasJogador()
@@ -33,10 +34,10 @@ public class InimigoGoianinha : MonoBehaviour
         if(distanciaPlayer < distanciaDoAtaque)
         {
             navMesh.isStopped = true;
-            Debug.Log("Doidera");
             anim.SetTrigger("ataca");
             anim.SetBool("podeAndar", false);
             anim.SetBool("paraAtaque", false);
+            CorrigiRigEntra();
         }
         if(distanciaPlayer >= 3)
         {
@@ -47,6 +48,42 @@ public class InimigoGoianinha : MonoBehaviour
             navMesh.isStopped = false;
             navMesh.SetDestination(player.transform.position);
             anim.ResetTrigger("ataca");
+            CorrigiRigSai();
         }
+    }
+
+    void OlhaParaPlayer()
+    {
+        Vector3 direcaoOlha = player.transform.position - transform.position;
+        Quaternion rotacao = Quaternion.LookRotation(direcaoOlha);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotacao, Time.deltaTime * 300);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            CorrigiRigEntra();
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            CorrigiRigSai();
+        }
+    }
+    
+    void CorrigiRigEntra()
+    {
+        navMesh.isStopped = true;
+        anim.SetBool("podeAndar", false);
+    }
+
+    void CorrigiRigSai()
+    {
+        navMesh.isStopped = false;
+        anim.SetBool("podeAndar", true);
     }
 }

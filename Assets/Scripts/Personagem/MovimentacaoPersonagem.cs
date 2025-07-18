@@ -202,4 +202,12 @@ public class MovimentacaoPersonagem : MonoBehaviour
             cansado = false;
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("cabecaDesliza"))
+        {
+            controle.SimpleMove(transform.forward * 1000 * Time.deltaTime);
+        }
+    }
 }
