@@ -34,11 +34,19 @@ public class InimigoGoianinha : MonoBehaviour
         {
             navMesh.isStopped = true;
             Debug.Log("Doidera");
+            anim.SetTrigger("ataca");
+            anim.SetBool("podeAndar", false);
+            anim.SetBool("paraAtaque", false);
         }
-        else
+        if(distanciaPlayer >= 3)
+        {
+            anim.SetBool("paraAtaque", true);
+        }
+        if(anim.GetBool("podeAndar"))
         {
             navMesh.isStopped = false;
             navMesh.SetDestination(player.transform.position);
+            anim.ResetTrigger("ataca");
         }
     }
 }
