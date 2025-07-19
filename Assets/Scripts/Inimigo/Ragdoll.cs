@@ -1,72 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 public class Ragdoll : MonoBehaviour
 {
-    public Rigidbody rigid;
     List<Rigidbody> ragdolRigids = new List<Rigidbody>();
-    List<Collider> ragdolColliders = new List<Collider>();
+    public Rigidbody rigid;
+    List<Collider>  ragdolColliders = new List<Collider>();
 
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
     }
 
+    // Update is called once per frame
     public void DesativaRagdoll()
     {
         Rigidbody[] rigs = GetComponentsInChildren<Rigidbody>();
 
-        foreach (var rb in rigs)
+        for (int i = 0; i < rigs.Length; i++)
         {
-            if (rb == rigid) continue;
-
-            ragdolRigids.Add(rb);
-            rb.isKinematic = true;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-
-            Collider col = rb.GetComponent<Collider>();
-            if (col != null)
+            if (rigs[i] == rigid)
             {
-                col.isTrigger = true;
-                ragdolColliders.Add(col);
+                continue;
             }
+            ragdolRigids.Add(rigs[i]);
+            rigs[i].isKinematic = true;
+
+            Collider col = rigs[i].gameObject.GetComponent<Collider>();
+            col.isTrigger = true;
+            ragdolColliders.Add(col);
         }
     }
 
     public void AtivaRagdoll()
     {
-        foreach (var rb in ragdolRigids)
+        for(int i=0; i<ragdolRigids.Count; i++)
         {
-            rb.isKinematic = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
-        foreach (var col in ragdolColliders)
-        {
-            col.isTrigger = false;
+            ragdolRigids[i].isKinematic = false;
+            ragdolColliders[i].isTrigger = false;
         }
 
         rigid.isKinematic = true;
+        GetComponent<CapsuleCollider>().enabled = false;
 
-        CapsuleCollider capsule = GetComponent<CapsuleCollider>();
-        if (capsule != null)
-        {
-            capsule.enabled = false;
-        }
-
-        StartCoroutine(FinalizaAnimacao());
+        StartCoroutine("FinalizaAnimacao");
     }
 
     IEnumerator FinalizaAnimacao()
     {
         yield return new WaitForEndOfFrame();
-        Animator anim = GetComponent<Animator>();
-        if (anim != null)
-            anim.enabled = false;
-
+        GetComponent<Animator>().enabled = false;
         this.enabled = false;
     }
 }
