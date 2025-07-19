@@ -16,6 +16,10 @@ public class InimigoGoianinha : MonoBehaviour
     public bool estaMorto;
     public bool bravo;
     public Renderer[] renderers;
+    public bool invencivel;
+
+    public AudioClip[] sonsMonstro;
+    public AudioSource audioMonstro;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,9 +29,11 @@ public class InimigoGoianinha : MonoBehaviour
         anim = GetComponent<Animator>();
         ragscript = GetComponent<Ragdoll>();
         renderers = GetComponentsInChildren<Renderer>();
+        audioMonstro = GetComponentInChildren<AudioSource>();
 
         ragscript.DesativaRagdoll();
         estaMorto = false;
+        invencivel = false;
     }
 
     // Update is called once per frame
@@ -40,9 +46,12 @@ public class InimigoGoianinha : MonoBehaviour
             VaiAtrasJogador();
             OlhaParaPlayer();
 
-            if(hp <= 50)
+            if(hp <= 50 && !bravo)
             {
                 bravo = true;
+                anim.ResetTrigger("levouTiro");
+                ParaDeAndar();
+                anim.CrossFade("ZombieScrean", 0.2f);
                 foreach (Renderer rend in renderers)
                 {
                     foreach (Material mat in rend.materials)
@@ -55,6 +64,7 @@ public class InimigoGoianinha : MonoBehaviour
 
             if (hp <= 0 && !estaMorto)
             {
+                Morrer();
                 foreach (Renderer rend in renderers)
                 {
                     foreach (Material mat in rend.materials)
@@ -137,15 +147,19 @@ public class InimigoGoianinha : MonoBehaviour
 
         if(n % 2 == 0 && !bravo)
         {
+            anim.SetTrigger("levouTiro");
             ParaDeAndar();
         }
-        hp -= dano;
+
+        if (!invencivel)
+        {
+            hp -= dano;
+        }
     }
 
     void ParaDeAndar()
     {
         navMesh.isStopped = true;
-        anim.SetTrigger("levouTiro");
         anim.SetBool("podeAndar", false);
         CorrigiRigEntra();
     }
@@ -153,5 +167,43 @@ public class InimigoGoianinha : MonoBehaviour
     public void daDano()
     {
         player.GetComponent<MovimentacaoPersonagem>().hp -= 13;
+    }
+
+    public void FicaInvencivel()
+    {
+        invencivel = true;
+    }
+
+    public void SaiInvencivel()
+    {
+        invencivel = false;
+        anim.speed = 2;
+    }
+
+    public void PassoMonstro()
+    {
+        audioMonstro.volume = 0.5f;
+        audioMonstro.PlayOneShot(sonsMonstro[0]);
+    }
+
+    public void SenteDor()
+    {
+        audioMonstro.volume = 1f;
+        audioMonstro.clip = sonsMonstro[1];
+        audioMonstro.Play();
+    }
+
+    public void Grita()
+    {
+        audioMonstro.volume = 1f;
+        audioMonstro.clip = sonsMonstro[2];
+        audioMonstro.Play();
+    }
+
+    public void Morrer()
+    {
+        audioMonstro.volume = 1f;
+        audioMonstro.clip = sonsMonstro[3];
+        audioMonstro.Play();
     }
 }
