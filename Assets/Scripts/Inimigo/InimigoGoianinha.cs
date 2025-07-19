@@ -21,6 +21,7 @@ public class InimigoGoianinha : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
         ragscript = GetComponent<Ragdoll>();
+        objDesliza = GameObject.FindWithTag("cabecaDesliza");
 
         ragscript.DesativaRagdoll();
         estaMorto = false;
