@@ -14,6 +14,8 @@ public class InimigoGoianinha : MonoBehaviour
 
     public GameObject objDesliza;
     public bool estaMorto;
+    public bool bravo;
+    public Renderer[] renderers;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +24,7 @@ public class InimigoGoianinha : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
         ragscript = GetComponent<Ragdoll>();
+        renderers = GetComponentsInChildren<Renderer>();
 
         ragscript.DesativaRagdoll();
         estaMorto = false;
@@ -37,8 +40,28 @@ public class InimigoGoianinha : MonoBehaviour
             VaiAtrasJogador();
             OlhaParaPlayer();
 
+            if(hp <= 50)
+            {
+                bravo = true;
+                foreach (Renderer rend in renderers)
+                {
+                    foreach (Material mat in rend.materials)
+                    {
+                        mat.color = Color.red;
+                    }
+                }
+                velocidade = 9;
+            }
+
             if (hp <= 0 && !estaMorto)
             {
+                foreach (Renderer rend in renderers)
+                {
+                    foreach (Material mat in rend.materials)
+                    {
+                        mat.color = Color.white;
+                    }
+                }
                 objDesliza.SetActive(false);
                 estaMorto = true;
                 ParaDeAndar();
@@ -109,7 +132,13 @@ public class InimigoGoianinha : MonoBehaviour
 
     public void LevouDano(int dano)
     {
-        ParaDeAndar();
+        int n;
+        n = Random.Range(0, 10);
+
+        if(n % 2 == 0 && !bravo)
+        {
+            ParaDeAndar();
+        }
         hp -= dano;
     }
 
