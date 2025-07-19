@@ -1626,7 +1626,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.28
+  m_Radius: 0.4
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
@@ -1675,6 +1675,7 @@ MonoBehaviour:
   distanciaPlayer: 0
   velocidade: 4
   hp: 100
+  objDesliza: {fileID: 2026969399}
   estaMorto: 0
 --- !u!4 &434974174 stripped
 Transform:
@@ -8425,7 +8426,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.42523634, y: 0.35623062, z: 0.2567761}
+  m_Size: {x: 0.37, y: 0.48, z: 0.39}
   m_Center: {x: 0.00000010430813, y: 0.17811525, z: -0.011740327}
 --- !u!1 &1259170357
 GameObject:
@@ -10340,7 +10341,7 @@ Transform:
   m_GameObject: {fileID: 2026969399}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.939, z: -0.016}
+  m_LocalPosition: {x: 0, y: 1.933, z: -0.016}
   m_LocalScale: {x: 0.59164, y: 0.48058, z: 0.38505659}
   m_ConstrainProportionsScale: 0
   m_Children: []
