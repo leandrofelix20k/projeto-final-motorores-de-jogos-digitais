@@ -19,6 +19,12 @@ public class InimigoLinha : MonoBehaviour
     public GameObject pedraPermanente;
     public Transform pontoDeArremesso;
     public GameObject pedraInstancia;
+    public CapsuleCollider capsuleCollider;
+    public GameObject cabecaDesliza;
+    public AudioSource audios;
+    public AudioClip[] sons;
+
+    public bool usaCurvaAnimacao;
 
     void Start()
     {
@@ -27,7 +33,9 @@ public class InimigoLinha : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         anim = GetComponent<Animator>();
         estaMorto = false;
-
+        usaCurvaAnimacao = false;
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        audios = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -41,6 +49,10 @@ public class InimigoLinha : MonoBehaviour
 
             if (hp <= 0)
             {
+                audios.volume = 1f;
+                audios.clip = sons[0];
+                audios.Play();
+                cabecaDesliza.SetActive(false);
                 estaMorto = true;
                 navMesh.isStopped = true;
                 navMesh.enabled = false;
@@ -48,8 +60,22 @@ public class InimigoLinha : MonoBehaviour
                 anim.applyRootMotion = true;
                 anim.CrossFade("Zombie Death", 0.2f);
                 transform.gameObject.layer = 7; 
-                GetComponent<CapsuleCollider>().direction = 2;
+                capsuleCollider.direction = 2;
+                usaCurvaAnimacao = false;
             }
+
+            if(usaCurvaAnimacao && !anim.IsInTransition(0))
+            {
+                capsuleCollider.height = anim.GetFloat("alturaCollider");
+                capsuleCollider.center = new Vector3(0, anim.GetFloat("centroColliderY"), 0);
+            }
+
+            else
+            {
+                capsuleCollider.height = 2.1f;
+                capsuleCollider.center = new Vector3(0, 1, 0);
+            }
+                
         }
     }
 
@@ -85,9 +111,11 @@ public class InimigoLinha : MonoBehaviour
             navMesh.isStopped = true;
             anim.SetBool("joga", true);
             CorrigiRigEntra();
+            usaCurvaAnimacao = true;
         }
         else
         {
+            pedraPermanente.SetActive(false);
             anim.SetBool("joga", false);
             navMesh.isStopped = false;
             navMesh.SetDestination(player.transform.position);
@@ -125,5 +153,11 @@ public class InimigoLinha : MonoBehaviour
     public void LevouDano(int dano)
     {
         hp -= dano;
+    }
+
+    public void SomPassos()
+    {
+        audios.volume = 5f;
+        audios.PlayOneShot(sons[1]);
     }
 }

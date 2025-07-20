@@ -8,6 +8,8 @@ public class JogaPedra : MonoBehaviour
     public float hVelocidade = 15;
     public float vVelocidade = 4;
     GameObject player;
+
+    public GameObject somChoca;
     void Start()
     {
         player = GameObject.FindWithTag("Player");
@@ -28,8 +30,16 @@ public class JogaPedra : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             player.GetComponent<MovimentacaoPersonagem>().hp -= 30;
+            CriaSomChoca();
         }
+        CriaSomChoca();
+    }
 
+    void CriaSomChoca()
+    {
+        GameObject som = Instantiate(somChoca, transform);
+        som.transform.parent = null;
         Destroy(this.gameObject);
+        Destroy(som, 2);
     }
 }
