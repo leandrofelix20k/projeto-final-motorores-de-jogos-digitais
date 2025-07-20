@@ -28,8 +28,8 @@ public class JogaPedra : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             player.GetComponent<MovimentacaoPersonagem>().hp -= 30;
-            Destroy(this.gameObject);
         }
-    
-   }
+
+        Destroy(this.gameObject);
+    }
 }

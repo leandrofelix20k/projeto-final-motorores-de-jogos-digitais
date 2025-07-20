@@ -1,6 +1,7 @@
 using System.Collections;
 using BASA;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class Pistola : MonoBehaviour
 {
@@ -146,17 +147,13 @@ public class Pistola : MonoBehaviour
         if (Physics.Raycast(new Vector3(ray.origin.x + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.y + Random.Range(-numeroAleatorioMira, numeroAleatorioMira), ray.origin.z), Camera.main.transform.forward, out hit))
         {
             if(hit.transform.tag == "Inimigo"){
-                if (hit.rigidbody != null && hit.transform.GetComponentInParent<InimigoGoianinha>().estaMorto)
+                if(hit.transform.GetComponent<InimigoGoianinha>() || hit.transform.GetComponent<InimigoLinha>())
+                {
+                    InimigoVerificadorDano();
+                }
+                else if(hit.rigidbody != null && hit.transform.GetComponentInParent<InimigoGoianinha>()) 
                 {
                     AdicionaForca(ray, 900);
-                }
-                else if (hit.transform.GetComponent<InimigoGoianinha>())
-                {
-                    hit.transform.GetComponent<InimigoGoianinha>().LevouDano(20);
-                }
-                else if (hit.transform.GetComponentInParent<InimigoGoianinha>())
-                {
-                    hit.transform.GetComponentInParent<InimigoGoianinha>().LevouDano(20);
                 }
 
                 GameObject particulaCriada = Instantiate(particulaSangue, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
@@ -175,6 +172,19 @@ public class Pistola : MonoBehaviour
         yield return new WaitForSeconds(0.3f); 
         estaAtirando = false;
     }
+
+    void InimigoVerificadorDano()
+    {
+        if(hit.transform.GetComponent<InimigoGoianinha>())
+        {
+            hit.transform.GetComponent<InimigoGoianinha>().LevouDano(17);
+        }
+        else if (hit.transform.GetComponent<InimigoLinha>())
+        {
+            hit.transform.GetComponent<InimigoLinha>().LevouDano(15);
+        }
+    }
+
 
     void InstanciaEfeitos()
     {
