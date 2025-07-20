@@ -10,11 +10,13 @@ namespace BASA
         public bool pegou;
         float distancia;
         public GameObject salvarObjeto;
+        MovimentacaoPersonagem scriptMovimenta;
 
         void Start()
         {
             rayCastScript = GetComponent<RayCastScript>();
             pegou = false;
+            scriptMovimenta = GetComponentInParent<MovimentacaoPersonagem>();
         }
 
 
@@ -64,6 +66,8 @@ namespace BASA
 
         void Pegar()
         {
+            scriptMovimenta.hp += 50;
+            scriptMovimenta.hp = Mathf.Clamp(scriptMovimenta.hp, 0, 100);
             Destroy(rayCastScript.objPega);
         }
     }

@@ -56,5 +56,11 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "projeto-final-motorores-de-jogos-digitais.sln"
+    "dotnet.defaultSolution": "projeto-final-motorores-de-jogos-digitais.sln",
+    "dotnet.preferCSharpExtension": true,
+    "cSpell.words": [
+        "Mathf",
+        "obej",
+        "Rigidbody"
+    ]
 }
