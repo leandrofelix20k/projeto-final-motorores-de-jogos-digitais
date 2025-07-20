@@ -45,6 +45,10 @@ public class InimigoLinha : MonoBehaviour
                 navMesh.isStopped = true;
                 navMesh.enabled = false;
                 CorrigiRigEntra();
+                anim.applyRootMotion = true;
+                anim.CrossFade("Zombie Death", 0.2f);
+                transform.gameObject.layer = 7; 
+                GetComponent<CapsuleCollider>().direction = 2;
             }
         }
     }
@@ -116,5 +120,10 @@ public class InimigoLinha : MonoBehaviour
     void CorrigiRigSai()
     {
         rigid.isKinematic = false;
+    }
+
+    public void LevouDano(int dano)
+    {
+        hp -= dano;
     }
 }
