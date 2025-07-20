@@ -16,6 +16,10 @@ public class InimigoLinha : MonoBehaviour
 
     public Rigidbody rigid;
 
+    public GameObject pedraPermanente;
+    public Transform pontoDeArremesso;
+    public GameObject pedraInstancia;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
@@ -45,6 +49,22 @@ public class InimigoLinha : MonoBehaviour
         }
     }
 
+    public void InstanciaPedra()
+    {
+        pedraPermanente.SetActive(false);
+        GameObject pedra = Instantiate(pedraInstancia, pontoDeArremesso.position, pontoDeArremesso.rotation);
+        pedra.transform.parent = null;
+        pedra.transform.LookAt(player.transform.position);
+        JogaPedra jogaScript = pedra.GetComponent<JogaPedra>();
+        jogaScript.Joga();
+    }
+
+
+    public void AparecePedraPermanente()
+    {
+        pedraPermanente.SetActive(true);
+
+    }
     void OlhaParaPlayer()
     {
         Vector3 direcaoOlha = player.transform.position - transform.position;
