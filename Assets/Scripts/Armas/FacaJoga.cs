@@ -46,6 +46,7 @@ public class FacaJoga : MonoBehaviour
             Destroy(somFaca, 2);
         }
 
+        // destruir o objeto faca após a colisão
         Destroy(this.gameObject);
     }
 }
