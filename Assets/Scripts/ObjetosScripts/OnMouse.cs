@@ -3,21 +3,31 @@ using UnityEngine;
 public class OnMouse : MonoBehaviour
 {
     public Material selecionado, naoSelecionado;
-    Renderer renderer;
+    private Renderer objectRenderer;  // Renomeado para evitar conflito com a propriedade herdada
 
     void Start()
     {
-        renderer = GetComponent<Renderer>();
+        objectRenderer = GetComponent<Renderer>();
+
+        if (objectRenderer == null)
+        {
+            Debug.LogError("Renderer não encontrado no GameObject " + gameObject.name);
+        }
     }
 
-    
-    void onMouseEnter()
+    private void OnMouseEnter()
     {
-        renderer.material = selecionado;
+        if (objectRenderer != null)
+        {
+            objectRenderer.material = selecionado;
+        }
     }
 
     void OnMouseExit()
     {
-        renderer.material = naoSelecionado;
+        if (objectRenderer != null)
+        {
+            objectRenderer.material = naoSelecionado;
+        }
     }
 }

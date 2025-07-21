@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -62,6 +63,9 @@ public class InimigoLinha : MonoBehaviour
                 transform.gameObject.layer = 7; 
                 capsuleCollider.direction = 2;
                 usaCurvaAnimacao = false;
+                GetComponent<DropItem>().Dropa();
+                pedraPermanente.SetActive(false);
+                StartCoroutine(SomeMorto());
             }
 
             if(usaCurvaAnimacao && !anim.IsInTransition(0))
@@ -77,6 +81,16 @@ public class InimigoLinha : MonoBehaviour
             }
                 
         }
+    }
+
+    IEnumerator SomeMorto()
+    {
+        yield return new WaitForSeconds(10);
+        capsuleCollider.enabled = false;
+        rigid.isKinematic = false;
+        anim.enabled = false;
+        yield return new WaitForSeconds(3);
+        Destroy(this.gameObject);
     }
 
     public void InstanciaPedra()
