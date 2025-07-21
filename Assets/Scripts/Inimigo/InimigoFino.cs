@@ -64,6 +64,7 @@ public class InimigoLinha : MonoBehaviour
                 capsuleCollider.direction = 2;
                 usaCurvaAnimacao = false;
                 GetComponent<DropItem>().Dropa();
+                pedraPermanente.SetActive(false);
                 StartCoroutine(SomeMorto());
             }
 
