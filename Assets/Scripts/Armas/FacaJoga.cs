@@ -29,7 +29,7 @@ public class FacaJoga : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.CompareTag("inimigo"))
+        if(col.gameObject.CompareTag("Inimigo"))
         {
             if(col.transform.gameObject.GetComponent<InimigoGoianinha>()) 
             {
