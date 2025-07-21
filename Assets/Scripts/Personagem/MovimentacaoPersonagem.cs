@@ -32,6 +32,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
 
     private float velocidadeNormal;
     private MovimentoCabeca movimentoCabeca;
+    private MovimentaCabecaNew movimentoCabecaNew;
 
     [Header("Status Personagem")]
     public float hp = 100f;
@@ -48,6 +49,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
         cameraTransform = Camera.main.transform;
         velocidadeNormal = velocidade;
         movimentoCabeca = GetComponentInChildren<MovimentoCabeca>();
+        movimentoCabecaNew = GetComponentInChildren<MovimentaCabecaNew>();
         audioPulo = GetComponent<AudioSource>();
         noAr = false;
 
@@ -133,7 +135,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
         {
             estaCorrendo = true;
             velocidade = 9;
-            stamina -= 0.15f;
+            stamina -= 0.1f;
             stamina = Mathf.Clamp(stamina, 0, 100);
         }
         else
@@ -148,8 +150,8 @@ public class MovimentacaoPersonagem : MonoBehaviour
             velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
             audioPulo.clip = audiosPulo[0];
             audioPulo.Play();
-            if (movimentoCabeca != null)
-                movimentoCabeca.PararPassos();
+            if (movimentoCabecaNew != null)
+                movimentoCabecaNew.PararPassos();
         }
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
