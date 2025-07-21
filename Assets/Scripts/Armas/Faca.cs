@@ -12,7 +12,7 @@ public class Faca : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !anim.GetBool("ocorreAcao"))
         {
             anim.Play("AtiraFaca");
         }
