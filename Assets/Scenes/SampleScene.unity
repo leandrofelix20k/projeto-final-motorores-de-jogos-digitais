@@ -372,14 +372,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60876066}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1603544571}
   - {fileID: 1999756809}
-  m_Father: {fileID: 330585546}
+  m_Father: {fileID: 1788330765}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &60876068
 MonoBehaviour:
@@ -750,7 +750,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 237093762}
-  - component: {fileID: 237093763}
+  - component: {fileID: 237093765}
   - component: {fileID: 237093764}
   m_Layer: 0
   m_Name: MovimentoCabeca
@@ -775,25 +775,6 @@ Transform:
   - {fileID: 253891965}
   m_Father: {fileID: 1888708919}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &237093763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 237093761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fdd7b9bd3dfb864bbcdd04a2168f184, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  passos:
-  - {fileID: 8300000, guid: adc721d39c3e05f4885f02ce5b0192f3, type: 3}
-  - {fileID: 8300000, guid: c98318009e122bb4bab3e2ca72b3b643, type: 3}
-  - {fileID: 8300000, guid: 8c4b7147328a7034e8f3987e22b4c4e3, type: 3}
-  - {fileID: 8300000, guid: 33cadcb497dc10b44aa9ed5738e965a5, type: 3}
-  intensidadeAndando: 0.2
-  intensidadeCorrendo: 0.15
 --- !u!82 &237093764
 AudioSource:
   m_ObjectHideFlags: 0
@@ -891,6 +872,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &237093765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237093761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd32ab8129b2d8b439c1d8df34239bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mao: {fileID: 1788330765}
+  passos:
+  - {fileID: 8300000, guid: adc721d39c3e05f4885f02ce5b0192f3, type: 3}
+  - {fileID: 8300000, guid: c98318009e122bb4bab3e2ca72b3b643, type: 3}
+  - {fileID: 8300000, guid: 8c4b7147328a7034e8f3987e22b4c4e3, type: 3}
+  - {fileID: 8300000, guid: 33cadcb497dc10b44aa9ed5738e965a5, type: 3}
 --- !u!1 &246824697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,7 +1143,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 60876067}
+  - {fileID: 1788330765}
   m_Father: {fileID: 253891965}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
@@ -3368,6 +3367,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1780175475}
   m_CullTransparentMesh: 1
+--- !u!1 &1788330764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1788330765}
+  m_Layer: 0
+  m_Name: Mao
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1788330765
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788330764}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 60876067}
+  m_Father: {fileID: 330585546}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1875475358
 GameObject:
   m_ObjectHideFlags: 0
@@ -3822,7 +3853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7446414949718487049, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7790429510189492915, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3941,6 +3972,10 @@ PrefabInstance:
     - target: {fileID: 3549898828289969674, guid: 73be80f51110b02439359adfbe5e515a, type: 3}
       propertyPath: m_Name
       value: ChupaKu-Goianinha
+      objectReference: {fileID: 0}
+    - target: {fileID: 3549898828289969674, guid: 73be80f51110b02439359adfbe5e515a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4181616999509316784, guid: 73be80f51110b02439359adfbe5e515a, type: 3}
       propertyPath: m_LocalPosition.x

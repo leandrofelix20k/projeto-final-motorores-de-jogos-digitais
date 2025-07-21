@@ -3,98 +3,118 @@ using BASA;
 
 public class MovimentoCabeca : MonoBehaviour
 {
-    public AudioClip[] passos;
-    private AudioSource audioSource;
+    private float tempo = 0.0f;
+    public float velocidade = 0.05f;
+    public float forca = 0.1f;
+    public float pontoOrigem = 0.0f;
 
-    private Vector3 posicaoCabecaOrigem;
-    private Vector3 posicaoCabeca;
-    private float tempoCabeca;
-    private int indexPassos;
+    float cortaOnda;
+    float horizontal;
+    float vertical;
+    Vector3 salvaPosicao;
 
-    public float intensidadeAndando = 0.2f;
-    public float intensidadeCorrendo = 0.15f;
+    AudioSource audioSource;
+    public AudioClip[] audioClip;
+    public int indexPassos;
 
-    private float intensidadeAtual;
-    private float multiplicadorVelocidade;
+    MovimentacaoPersonagem scriptMovimenta;
 
+    private float forcaNormal;
+    private float velocidadeNormal;
     private bool pulando = false;
-
-    private MovimentacaoPersonagem scriptPersonagem;
-
-    private float intensidadePadrao;
-    private float multiplicadorPadrao;
+    private MovimentacaoPersonagem movPersonagem;
 
     void Start()
     {
-        scriptPersonagem = GetComponentInParent<MovimentacaoPersonagem>();
+        scriptMovimenta = GetComponentInParent<MovimentacaoPersonagem>();
         audioSource = GetComponent<AudioSource>();
         indexPassos = 0;
-        posicaoCabecaOrigem = transform.localPosition;
-
-        intensidadePadrao = intensidadeAndando;
-        multiplicadorPadrao = 10f;
+        forcaNormal = forca;
+        velocidadeNormal = velocidade;
+        movPersonagem = GetComponentInParent<MovimentacaoPersonagem>();
     }
 
     void Update()
     {
         if (pulando)
         {
-            if (scriptPersonagem != null && scriptPersonagem.estaNoChao)
+            if (movPersonagem != null && movPersonagem.estaNoChao)
+            {
                 pulando = false;
+            }
             return;
         }
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        cortaOnda = 0.0f;
+        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
 
-        AtualizaIntensidade();
+        salvaPosicao = transform.localPosition;
 
-        bool estaParado = Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0;
-
-        if (estaParado)
+        if (Mathf.Abs(horizontal) == 0 && Mathf.Abs(vertical) == 0)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, posicaoCabecaOrigem, Time.deltaTime * 10);
+            tempo = 0.0f;
         }
         else
         {
-            float seno = Mathf.Sin(tempoCabeca);
-            posicaoCabeca = posicaoCabecaOrigem + new Vector3(0, seno * intensidadeAtual, 0);
-            tempoCabeca += Time.deltaTime * multiplicadorVelocidade;
+            cortaOnda = Mathf.Sin(tempo);
+            tempo = tempo + velocidade;
 
-            transform.localPosition = Vector3.Lerp(transform.localPosition, posicaoCabeca, Time.deltaTime * 6);
-            SomPassos(seno);
+            if (tempo > Mathf.PI * 2)
+            {
+                tempo = tempo - (Mathf.PI * 2);
+            }
         }
+
+        if (cortaOnda != 0)
+        {
+            float mudaMovimentacao = cortaOnda * forca;
+            float eixosTotais = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
+            eixosTotais = Mathf.Clamp(eixosTotais, 0.0f, 1.0f);
+            mudaMovimentacao = eixosTotais * mudaMovimentacao;
+            salvaPosicao.y = pontoOrigem + mudaMovimentacao;
+        }
+        else
+        {
+            salvaPosicao.y = pontoOrigem;
+        }
+
+        transform.localPosition = salvaPosicao;
+
+        SomPassos();
+        AtualizaCabeca();
     }
 
-    void SomPassos(float seno)
+    void SomPassos()
     {
-        if (seno < -0.95f && !audioSource.isPlaying && scriptPersonagem.estaNoChao)
+        if (pulando) return;
+
+        if (cortaOnda <= -0.95f && !audioSource.isPlaying && scriptMovimenta.estaNoChao)
         {
-            audioSource.clip = passos[indexPassos];
+            audioSource.clip = audioClip[indexPassos];
             audioSource.Play();
-            indexPassos = (indexPassos + 1) % passos.Length;
+            indexPassos = (indexPassos + 1) % audioClip.Length;
         }
     }
 
-    void AtualizaIntensidade()
+    void AtualizaCabeca()
     {
-        if (scriptPersonagem.estaCorrendo)
+        if (scriptMovimenta.estaCorrendo)
         {
-            intensidadeAtual = intensidadeCorrendo; 
-            multiplicadorVelocidade = 15f;
+            velocidade = 0.25f;
+            forca = 0.25f;
         }
-        else if (scriptPersonagem.estaAbaixado)
+        else if (scriptMovimenta.estaAbaixado)
         {
-            intensidadeAtual = 0.11f;
-            multiplicadorVelocidade = 5f;
+            velocidade = 0.15f;
+            forca = 0.11f;
         }
         else
         {
-            intensidadeAtual = intensidadeAndando;
-            multiplicadorVelocidade = 10f;
+            velocidade = 0.18f;
+            forca = 0.15f;
         }
     }
-
 
     public void PararPassos()
     {
@@ -104,13 +124,13 @@ public class MovimentoCabeca : MonoBehaviour
 
     public void ReduzirOscilacao(float fatorReducao)
     {
-        intensidadeAtual *= fatorReducao;
-        multiplicadorVelocidade *= fatorReducao;
+        forca = forcaNormal * fatorReducao;
+        velocidade = velocidadeNormal * fatorReducao;
     }
 
     public void RestaurarOscilacao()
     {
-        intensidadeAtual = intensidadePadrao;
-        multiplicadorVelocidade = multiplicadorPadrao;
+        forca = forcaNormal;
+        velocidade = velocidadeNormal;
     }
 }
