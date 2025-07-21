@@ -63,6 +63,7 @@ public class InimigoLinha : MonoBehaviour
                 transform.gameObject.layer = 7; 
                 capsuleCollider.direction = 2;
                 usaCurvaAnimacao = false;
+                GetComponent<DropItem>().Dropa();
                 StartCoroutine(SomeMorto());
             }
 

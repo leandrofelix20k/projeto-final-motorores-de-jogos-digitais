@@ -78,6 +78,7 @@ public class InimigoGoianinha : MonoBehaviour
                 navMesh.enabled = false;
                 ragscript.AtivaRagdoll();
                 StartCoroutine(ragscript.SomeMorto());
+                GetComponent<DropItem>().Dropa();
             }
         }
     }
