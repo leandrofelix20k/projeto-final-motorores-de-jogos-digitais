@@ -67,7 +67,10 @@ namespace BASA
         void Pegar()
         {
             scriptMovimenta.hp += 50;
-            GetComponentInChildren<Pistola>().carregador = 3;
+            if (GetComponentInChildren<Pistola>())
+            {
+                GetComponentInChildren<Pistola>().carregador = 3;
+            }
             scriptMovimenta.hp = Mathf.Clamp(scriptMovimenta.hp, 0, 100);
             Destroy(rayCastScript.objPega);
         }
