@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 namespace BASA
 {
@@ -17,6 +18,7 @@ namespace BASA
         public Image imgMachuca;
         public Text txtFrase;
         public Button[] botoes;
+        float tempo;
 
         public bool fimjogo;
         void Start()
@@ -34,20 +36,33 @@ namespace BASA
 
             if(scriptMovimenta.hp <= 0 && !fimjogo)
             {
-                fimjogo = true;
-                imgMachuca.GetComponent<Animator>().Play("FimJogo");
-                Time.timeScale = 0;
-                Camera.main.gameObject.GetComponent<AudioListener>().enabled = false;
-                for(int i = 0; i < botoes.Length; i++)
-                {
-                    botoes[i].gameObject.SetActive(true);
-                }
-
-                txtFrase.gameObject.SetActive(true);
+                tempo = 0;
                 txtFrase.text = "Game Over!";
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                StartCoroutine(FimDoJogo());
             }
+            else if(Missao.bossMorto && !fimjogo)
+            {
+                tempo = 5;
+                txtFrase.text = "Você Ganhou!";
+                StartCoroutine(FimDoJogo());
+            }
+        }
+
+        IEnumerator FimDoJogo()
+        {
+            yield return new WaitForSeconds(tempo);
+            fimjogo = true;
+            imgMachuca.GetComponent<Animator>().Play("FimJogo");
+            Time.timeScale = 0;
+            Camera.main.gameObject.GetComponent<AudioListener>().enabled = false;
+            for (int i = 0; i < botoes.Length; i++)
+            {
+                botoes[i].gameObject.SetActive(true);
+            }
+
+            txtFrase.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         public void ReiniciaJogo()

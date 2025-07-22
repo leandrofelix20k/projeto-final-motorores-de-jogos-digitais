@@ -9,11 +9,16 @@ public class Missao : MonoBehaviour
     public bool invocaBoss;
     public Material materialBoss;
     public float valorAmount;
+
+    InimigoLinha scriptBoss;
+    public static bool bossMorto;
+
     void Start()
     {
         numeroCaixas = 0;
         invocaBoss = true;
         valorAmount = 0.6f;
+        scriptBoss = boss.GetComponent<InimigoLinha>();
     }
 
     // Update is called once per frame
@@ -30,6 +35,8 @@ public class Missao : MonoBehaviour
             valorAmount = Mathf.Lerp(valorAmount, 0, Time.deltaTime * 2);
             materialBoss.SetFloat("_Amount", valorAmount);
         }
+
+        bossMorto = scriptBoss.estaMorto;
     }
 
     void OnTriggerEnter(Collider col)
