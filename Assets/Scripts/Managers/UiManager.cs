@@ -43,7 +43,7 @@ namespace BASA
             else if(Missao.bossMorto && !fimjogo)
             {
                 tempo = 5;
-                txtFrase.text = "Você Ganhou!";
+                txtFrase.text = "Vocï¿½ Ganhou!";
                 StartCoroutine(FimDoJogo());
             }
         }
@@ -67,7 +67,7 @@ namespace BASA
 
         public void ReiniciaJogo()
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
             Time.timeScale = 1;
         }
 
