@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using BASA;
+
 
 public class MovimentacaoPersonagem : MonoBehaviour
 {
@@ -11,8 +13,8 @@ public class MovimentacaoPersonagem : MonoBehaviour
     public float alturaPulo = 3f;
     public float gravidade = -20f;
     public bool estaCorrendo;
-    public AudioClip[] audiosPulo;
-    AudioSource audioPulo;
+    public AudioClip[] audiosGerais;
+    AudioSource audioPersonagem;
     bool noAr;
 
     [Header("Verifica Chao")]
@@ -47,6 +49,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
     public float anguloLimitePulo;
     public float distanciaRaio;
 
+    UiManager uiScript;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Start()
@@ -59,8 +62,10 @@ public class MovimentacaoPersonagem : MonoBehaviour
         velocidadeNormal = velocidade;
         movimentoCabeca = GetComponentInChildren<MovimentoCabeca>();
         movimentoCabecaNew = GetComponentInChildren<MovimentaCabecaNew>();
-        audioPulo = GetComponent<AudioSource>();
+        audioPersonagem = GetComponent<AudioSource>();
         noAr = false;
+        uiScript = GameObject.FindWithTag("uiManager").GetComponent<UiManager>();
+
 
         if (cameraTransform == null)
         {
@@ -106,8 +111,8 @@ public class MovimentacaoPersonagem : MonoBehaviour
         if (estaNoChao && noAr)
         {
             noAr = false;
-            audioPulo.clip = audiosPulo[0];
-            audioPulo.Play();
+            audioPersonagem.clip = audiosGerais[0];
+            audioPersonagem.Play();
         }
     }
 
@@ -176,8 +181,8 @@ public class MovimentacaoPersonagem : MonoBehaviour
         if (Input.GetButtonDown("Jump") && estaNoChao && podePular)
         {
             velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
-            audioPulo.clip = audiosPulo[0];
-            audioPulo.Play();
+            audioPersonagem.clip = audiosGerais[0];
+            audioPersonagem.Play();
             if (movimentoCabecaNew != null)
                 movimentoCabecaNew.PararPassos();
         }
@@ -239,5 +244,12 @@ public class MovimentacaoPersonagem : MonoBehaviour
         {
             controle.SimpleMove(transform.forward * 1000 * Time.deltaTime);
         }
+    }
+
+    public void SomDano()
+    {
+        audioPersonagem.clip = audiosGerais[2];
+        audioPersonagem.Play();
+        uiScript.imgMachuca.GetComponent<Animator>().Play("MachucaImg");
     }
 }

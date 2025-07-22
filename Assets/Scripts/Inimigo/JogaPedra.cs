@@ -27,9 +27,10 @@ public class JogaPedra : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             player.GetComponent<MovimentacaoPersonagem>().hp -= 30;
+            player.GetComponent<MovimentacaoPersonagem>().SomDano();
         }
         CriaSomChoca();
     }

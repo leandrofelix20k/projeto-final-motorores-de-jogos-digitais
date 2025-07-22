@@ -13,6 +13,7 @@ namespace BASA
         public RectTransform mira;
         public Sprite[] spriteItens;
         public Image imagem;
+        public Image imgMachuca;
         void Start()
         {
             scriptMovimenta = GameObject.FindWithTag("Player").GetComponent<MovimentacaoPersonagem>();
