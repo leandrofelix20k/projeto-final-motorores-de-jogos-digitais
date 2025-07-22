@@ -270,7 +270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 143a8d138735d114fa195628389412a6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.3284836
+      value: 24.28
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 143a8d138735d114fa195628389412a6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -278,7 +278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 143a8d138735d114fa195628389412a6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.683516
+      value: 42.73
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 143a8d138735d114fa195628389412a6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -314,7 +314,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 143a8d138735d114fa195628389412a6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 143a8d138735d114fa195628389412a6, type: 3}
       propertyPath: m_TagString
@@ -486,6 +486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDrop: {fileID: 147866, guid: 2398398009cd3134e99d728baf4aa18f, type: 3}
+  itemMissao: {fileID: 2444995428177857280, guid: 600166bce130bb93ca9140b2a0ba8b54, type: 3}
 --- !u!82 &828486791405276897
 AudioSource:
   m_ObjectHideFlags: 0
