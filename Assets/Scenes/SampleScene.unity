@@ -3597,6 +3597,10 @@ MonoBehaviour:
   stamina: 100
   cansado: 0
   scriptRespiracao: {fileID: 253891966}
+  pontoContato: {x: 0, y: 0, z: 0}
+  podePular: 0
+  anguloLimitePulo: 30
+  distanciaRaio: 2
 --- !u!143 &1888708918
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4040,7 +4044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3549898828289969674, guid: 73be80f51110b02439359adfbe5e515a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4181616999509316784, guid: 73be80f51110b02439359adfbe5e515a, type: 3}
       propertyPath: m_LocalPosition.x

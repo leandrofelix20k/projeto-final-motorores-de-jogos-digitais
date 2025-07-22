@@ -7,7 +7,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
     [Header("Configuracao Personagem")]
     public CharacterController controle;
     public float velocidade = 6f;
-    public float velocidadeAbaixado = 3f; // Nova variável para velocidade agachado
+    public float velocidadeAbaixado = 3f; // Nova variï¿½vel para velocidade agachado
     public float alturaPulo = 3f;
     public float gravidade = -20f;
     public bool estaCorrendo;
@@ -40,6 +40,15 @@ public class MovimentacaoPersonagem : MonoBehaviour
     public bool cansado;
     public Respiracao scriptRespiracao;
 
+    [Header("TravaPulo")]
+    public Vector3 pontoContato;
+    public bool podePular;
+    RaycastHit hitContato;
+    public float anguloLimitePulo;
+    public float distanciaRaio;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         cansado = false;
@@ -59,6 +68,25 @@ public class MovimentacaoPersonagem : MonoBehaviour
         }
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        pontoContato = hit.point;
+    }
+
+    void FixedUpdate()
+    {
+        if (Physics.Raycast(transform.position, -Vector3.up, out hitContato, distanciaRaio))
+        {
+            if (Vector3.Angle(hitContato.normal, Vector3.up) > anguloLimitePulo)
+            {
+                podePular = false;
+            }
+            else
+            {
+                podePular = true;
+            }
+        }
+    }
     void Update()
     {
         Verificacoes();
@@ -75,7 +103,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
             noAr = true;
         }
 
-        if(estaNoChao && noAr)
+        if (estaNoChao && noAr)
         {
             noAr = false;
             audioPulo.clip = audiosPulo[0];
@@ -112,7 +140,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
     {
         controle.center = Vector3.down * (alturaLevantado - controle.height) / 2f;
 
-        if(estaAbaixado)
+        if (estaAbaixado)
         {
             controle.height = Mathf.Lerp(controle.height, alturaAbaixado, Time.deltaTime * 3);
             float novoY = Mathf.SmoothDamp(cameraTransform.localPosition.y, posicaoCameraAbaixado, ref velocidadeCorrente, Time.deltaTime * 3);
@@ -145,7 +173,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
             stamina = Mathf.Clamp(stamina, 0, 100);
         }
 
-        if (Input.GetButtonDown("Jump") && estaNoChao)
+        if (Input.GetButtonDown("Jump") && estaNoChao && podePular)
         {
             velocidadeCai.y = Mathf.Sqrt(alturaPulo * -2f * gravidade);
             audioPulo.clip = audiosPulo[0];
@@ -168,7 +196,7 @@ public class MovimentacaoPersonagem : MonoBehaviour
         }
 
         estaAbaixado = !estaAbaixado;
-        
+
     }
 
     void checarBloqueioAbaixado()
@@ -193,13 +221,13 @@ public class MovimentacaoPersonagem : MonoBehaviour
 
     void CondicaoPlayer()
     {
-        if(stamina == 0)
+        if (stamina == 0)
         {
             cansado = true;
             scriptRespiracao.forcaResp = 5;
         }
 
-        if(stamina > 20)
+        if (stamina > 20)
         {
             cansado = false;
         }
