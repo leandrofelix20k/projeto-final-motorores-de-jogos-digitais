@@ -1,9 +1,9 @@
-﻿Shader "Custom/Outline"
+﻿Shader "Custom/URP_Outline"
 {
     Properties
     {
         _MainTex("Main Texture (RGB)", 2D) = "white" {}
-        _Color("Color", Color) = (0.13, 0.18, 0.09, 1) // Verde militar padrão
+        _Color("Main Color", Color) = (0.13, 0.18, 0.09, 1)
 
         _OutlineTex("Outline Texture", 2D) = "white" {}
         _OutlineColor("Outline Color", Color) = (1,1,1,1)
@@ -12,95 +12,100 @@
 
     SubShader
     {
-        Tags { "Queue"="Overlay" "RenderType"="Opaque" }
+        Tags { "RenderPipeline"="UniversalPipeline" "Queue"="Transparent" "RenderType"="Transparent" }
+        Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite On
+
+        // --- Pass do contorno ---
         Pass
         {
             Name "OUTLINE"
-            ZWrite On
             Cull Front
             ZTest LEqual
 
-            CGPROGRAM
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            struct appdata
+            struct Attributes
             {
-                float4 vertex : POSITION;
+                float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f
+            struct Varyings
             {
-                float4 pos : SV_POSITION;
+                float4 positionCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            float _OutlineWidth;
-            float4 _OutlineColor;
-            sampler2D _OutlineTex;
+            TEXTURE2D(_OutlineTex);
+            SAMPLER(sampler_OutlineTex);
             float4 _OutlineTex_ST;
+            float4 _OutlineColor;
+            float _OutlineWidth;
 
-            v2f vert(appdata IN)
+            Varyings vert(Attributes IN)
             {
-                IN.vertex.xyz *= _OutlineWidth; // Expande os vértices para fora
-                v2f OUT;
-                OUT.pos = UnityObjectToClipPos(IN.vertex);
+                Varyings OUT;
+                float3 scaledVertex = IN.positionOS.xyz * _OutlineWidth;
+                OUT.positionCS = TransformObjectToHClip(scaledVertex);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _OutlineTex);
                 return OUT;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
-                float4 texColor = tex2D(_OutlineTex, IN.uv);
-                return texColor * _OutlineColor; // Aplica cor do contorno
+                float4 texColor = SAMPLE_TEXTURE2D(_OutlineTex, sampler_OutlineTex, IN.uv);
+                return texColor * _OutlineColor;
             }
-            ENDCG
+            ENDHLSL
         }
 
+        // --- Pass do objeto principal ---
         Pass
         {
             Name "OBJECT"
-            ZWrite On
-            ZTest LEqual
             Cull Back
+            ZTest LEqual
 
-            CGPROGRAM
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            struct appdata
+            struct Attributes
             {
-                float4 vertex : POSITION;
+                float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f
+            struct Varyings
             {
-                float4 pos : SV_POSITION;
+                float4 positionCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            float4 _Color;
-            sampler2D _MainTex;
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
             float4 _MainTex_ST;
+            float4 _Color;
 
-            v2f vert(appdata IN)
+            Varyings vert(Attributes IN)
             {
-                v2f OUT;
-                OUT.pos = UnityObjectToClipPos(IN.vertex);
+                Varyings OUT;
+                OUT.positionCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
                 return OUT;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
-                float4 texColor = tex2D(_MainTex, IN.uv);
-                return texColor * _Color; // Aplica a cor principal
+                float4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                return texColor * _Color;
             }
-            ENDCG
+            ENDHLSL
         }
     }
 }

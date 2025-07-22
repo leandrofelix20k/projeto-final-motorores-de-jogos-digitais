@@ -25,6 +25,8 @@ public class InimigoLinha : MonoBehaviour
     public AudioSource audios;
     public AudioClip[] sons;
 
+    public bool boss = false;
+
     public bool usaCurvaAnimacao;
 
     void Start()
@@ -63,7 +65,10 @@ public class InimigoLinha : MonoBehaviour
                 transform.gameObject.layer = 7; 
                 capsuleCollider.direction = 2;
                 usaCurvaAnimacao = false;
-                GetComponent<DropItem>().Dropa();
+                if (!boss)
+                {
+                    GetComponent<DropItem>().Dropa();
+                }
                 pedraPermanente.SetActive(false);
                 StartCoroutine(SomeMorto());
             }

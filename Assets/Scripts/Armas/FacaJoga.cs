@@ -33,12 +33,12 @@ public class FacaJoga : MonoBehaviour
         {
             if(col.transform.gameObject.GetComponent<InimigoGoianinha>()) 
             {
-                col.transform.gameObject.GetComponent<InimigoGoianinha>().LevouDano(20);
+                col.transform.gameObject.GetComponent<InimigoGoianinha>().LevouDano(10);
             }
 
             if (col.transform.gameObject.GetComponent<InimigoLinha>())
             {
-                col.transform.gameObject.GetComponent<InimigoLinha>().LevouDano(20);
+                col.transform.gameObject.GetComponent<InimigoLinha>().LevouDano(10);
             }
 
             Instantiate(sangue, transform.position, Quaternion.Euler(0, 90, 0));

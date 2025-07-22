@@ -168,8 +168,7 @@ public class InimigoGoianinha : MonoBehaviour
 
     public void daDano()
     {
-        player.GetComponent<MovimentacaoPersonagem>().hp -= 10;
-        player.GetComponent<MovimentacaoPersonagem>().SomDano();
+        player.GetComponent<MovimentacaoPersonagem>().LevouDano(10);
     }
 
     public void FicaInvencivel()
