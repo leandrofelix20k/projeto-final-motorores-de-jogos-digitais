@@ -4201,11 +4201,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: f057ba522e8991d4eb7300d4e2e18556, type: 2}
     - target: {fileID: 6199803269022034638, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: hp
-      value: 300
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 6199803269022034638, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: boss
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6199803269022034638, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
+      propertyPath: estaMorto
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6199803269022034638, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: distanciaDoAtaque

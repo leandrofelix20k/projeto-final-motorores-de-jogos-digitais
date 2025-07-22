@@ -18,25 +18,38 @@ public class InimigosManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tempo += Time.deltaTime;
-        if (tempo > 60)
+        if (!Missao.bossMorto)
         {
-            tempo = 0;
-
-            for (int i = 0; i < listaInimigos.Count; i++)
+            tempo += Time.deltaTime;
+            if (tempo > 60)
             {
-                if (listaInimigos[i] == null)
+                tempo = 0;
+
+                for (int i = 0; i < listaInimigos.Count; i++)
                 {
+                    if (listaInimigos[i] == null)
+                    {
+                        listaInimigos.RemoveAt(i);
+                    }
+                }
+
+                if (listaInimigos.Count < 20)
+                {
+                    CriaInimigos();
+                }
+            }
+        } else if(Missao.bossMorto)
+        {
+            if(listaInimigos.Count > 0)
+            {
+                for(int i=0; i<listaInimigos.Count; i++)
+                {
+                    Destroy(listaInimigos[i]);
                     listaInimigos.RemoveAt(i);
                 }
             }
-
-            if (listaInimigos.Count < 20)
-            {
-                CriaInimigos();
-            }
-
         }
+        
     }
 
     void CriaInimigos()
