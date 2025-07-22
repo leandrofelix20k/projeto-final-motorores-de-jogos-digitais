@@ -246,8 +246,9 @@ public class MovimentacaoPersonagem : MonoBehaviour
         }
     }
 
-    public void SomDano()
+    public void LevouDano(int dano)
     {
+        hp -= dano;
         audioPersonagem.clip = audiosGerais[2];
         audioPersonagem.Play();
         uiScript.imgMachuca.GetComponent<Animator>().Play("MachucaImg");

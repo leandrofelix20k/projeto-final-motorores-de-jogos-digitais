@@ -7,19 +7,28 @@ public class Missao : MonoBehaviour
     public int numeroCaixas;
     public GameObject boss;
     public bool invocaBoss;
+    public Material materialBoss;
+    public float valorAmount;
     void Start()
     {
         numeroCaixas = 0;
         invocaBoss = true;
+        valorAmount = 0.6f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (numeroCaixas == 3 && invocaBoss)
+        if (numeroCaixas == 8 && invocaBoss)
         {
             invocaBoss = false;
             boss.SetActive(true);
+        }
+
+        if (!invocaBoss)
+        {
+            valorAmount = Mathf.Lerp(valorAmount, 0, Time.deltaTime * 2);
+            materialBoss.SetFloat("_Amount", valorAmount);
         }
     }
 
