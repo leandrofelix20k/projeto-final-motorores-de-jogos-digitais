@@ -1235,6 +1235,8 @@ MonoBehaviour:
   numeroCaixas: 0
   boss: {fileID: 72888199}
   invocaBoss: 0
+  materialBoss: {fileID: 2100000, guid: f057ba522e8991d4eb7300d4e2e18556, type: 2}
+  valorAmount: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,6 +3622,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2591551076929175866, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2604004113315668564, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f057ba522e8991d4eb7300d4e2e18556, type: 2}
     - target: {fileID: 6199803269022034638, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: hp
       value: 300
@@ -3654,7 +3664,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7790429510189492915, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.23
+      value: 0.53
       objectReference: {fileID: 0}
     - target: {fileID: 7790429510189492915, guid: 59e99a7837659474494720de5a5b7df9, type: 3}
       propertyPath: m_LocalPosition.z
