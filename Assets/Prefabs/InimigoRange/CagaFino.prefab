@@ -486,6 +486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDrop: {fileID: 147866, guid: 2398398009cd3134e99d728baf4aa18f, type: 3}
+  itemMissao: {fileID: 2444995428177857280, guid: 600166bce130bb93ca9140b2a0ba8b54, type: 3}
 --- !u!82 &828486791405276897
 AudioSource:
   m_ObjectHideFlags: 0

@@ -95,19 +95,24 @@ public class InimigoLinha : MonoBehaviour
 
     public void InstanciaPedra()
     {
-        pedraPermanente.SetActive(false);
-        GameObject pedra = Instantiate(pedraInstancia, pontoDeArremesso.position, pontoDeArremesso.rotation);
-        pedra.transform.parent = null;
-        pedra.transform.LookAt(player.transform.position);
-        JogaPedra jogaScript = pedra.GetComponent<JogaPedra>();
-        jogaScript.Joga();
+        if (!estaMorto)
+        {
+            pedraPermanente.SetActive(false);
+            GameObject pedra = Instantiate(pedraInstancia, pontoDeArremesso.position, pontoDeArremesso.rotation);
+            pedra.transform.parent = null;
+            pedra.transform.LookAt(player.transform.position);
+            JogaPedra jogaScript = pedra.GetComponent<JogaPedra>();
+            jogaScript.Joga();
+        }
     }
 
 
     public void AparecePedraPermanente()
     {
-        pedraPermanente.SetActive(true);
-
+        if (!estaMorto)
+        {
+            pedraPermanente.SetActive(true);
+        }
     }
     void OlhaParaPlayer()
     {
